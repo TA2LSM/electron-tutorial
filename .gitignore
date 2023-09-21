@@ -1,0 +1,11 @@
+.DS_Store
+Pods/
+Podfile.lock
+*.xcuserstate
+GoogleService-Info.plist
+node_modules/
+logs/
+.env
+.env.production
+package-lock.json
+
