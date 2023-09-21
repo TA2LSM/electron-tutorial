@@ -1,3 +1,5 @@
+//----- Back-end Codes -----
+
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
@@ -28,7 +30,7 @@ app.on("ready", () => {
   mainWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "main.html"),
-      protocol: "file",
+      protocol: "file:",
       slashes: true, // manage slash (/) for windows and linux based OS >> file://electron/main.html
     })
   );
@@ -37,9 +39,20 @@ app.on("ready", () => {
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
 
-  // Catching event coming from main.html
-  ipcMain.on("startBtnBtnClicked", (err, data) => {
-    console.log(data);
+  // Catching events coming from main.html
+  ipcMain.on("key:startBtnBtnClicked", (err, data) => {
+    if (data) console.log(data);
+    else console.log("No data!");
+  });
+
+  ipcMain.on("key:newWindowBtn", () => {
+    //console.log("new");
+    createWindow();
+  });
+
+  // Catching main window's close event (kill all processes)
+  mainWindow.on("close", () => {
+    app.quit();
   });
 });
 
@@ -108,4 +121,25 @@ function setShortcut(param) {
     return process.platform == "darwin" ? "Command+S" : "Ctrl+S";
   else if (param == "quit")
     return process.platform == "darwin" ? "Command+Q" : "Ctrl+Q";
+}
+
+function createWindow() {
+  parameterWindow = new BrowserWindow({
+    title: "Parameters",
+    width: 400,
+    height: 300,
+  });
+
+  parameterWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "parameters.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+
+  // catch parameterWindow's close event for deleting it from memory
+  parameterWindow.on("close", () => {
+    parameterWindow = null;
+  });
 }
