@@ -36,6 +36,11 @@ app.on("ready", () => {
     })
   );
 
+  // Catching main window's close event (kill all processes)
+  mainWindow.on("close", () => {
+    app.quit();
+  });
+
   // Generate app menu
   const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
   Menu.setApplicationMenu(mainMenu);
@@ -52,13 +57,15 @@ app.on("ready", () => {
 
   // Catching events coming from newTodo.html
   ipcMain.on("newTodoWindow:close", () => {
-    console.log("aloo");
-    // newTodoWindow.close(); // close new to do page
+    newTodoWindow.close(); // close new to do page
+    newTodoWindow = null;
   });
 
-  // Catching main window's close event (kill all processes)
-  mainWindow.on("close", () => {
-    app.quit();
+  ipcMain.on("newTodoWindow:save", (err, data) => {
+    console.log(data);
+
+    newTodoWindow.close();
+    newTodoWindow = null;
   });
 });
 
@@ -191,6 +198,12 @@ function createNewTodoWindow() {
     height: 183,
     resizable: false,
     frame: false,
+    //--- added to solve require issue in main.html ---
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    //-------------------------------------------------
   });
 
   newTodoWindow.loadURL(
