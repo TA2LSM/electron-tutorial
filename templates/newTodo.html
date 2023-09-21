@@ -30,6 +30,7 @@
       ipcRenderer.send("newTodoWindow:close");
     });
 
+    const newTodo = document.getElementById("newTodo");
     const newTodoSaveBtn = document.getElementById("newTodoSaveBtn");
     newTodoSaveBtn.addEventListener("click", () => {
       ipcRenderer.send("newTodoWindow:save", newTodo.value)

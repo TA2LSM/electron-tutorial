@@ -4,10 +4,13 @@ const electron = require("electron");
 const url = require("url");
 const path = require("path");
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
-let mainWindow, aboutWindow, newTodoWindow;
-
 // Bootstrap 4.0.0 css file used in main.html
+
+const { app, BrowserWindow, Menu, ipcMain } = electron;
+let mainWindow, aboutWindow, todoListWindow, newTodoWindow;
+
+// temporary list
+let todoList = [];
 
 app.on("ready", () => {
   // Getting OS information (win32 -> Windows, darwin -> macOS, ...etc)
@@ -52,7 +55,7 @@ app.on("ready", () => {
   });
 
   ipcMain.on("key:openTodoListBtn", () => {
-    createWindow("Yapılacaklar Listesi");
+    createTodoWindow();
   });
 
   // Catching events coming from newTodo.html
@@ -62,10 +65,17 @@ app.on("ready", () => {
   });
 
   ipcMain.on("newTodoWindow:save", (err, data) => {
-    console.log(data);
+    if (data) {
+      todoList.push({
+        id: todoList.length + 1,
+        text: data,
+      });
 
-    newTodoWindow.close();
-    newTodoWindow = null;
+      todoListWindow.webContents.send("todoList:updated", todoList);
+
+      newTodoWindow.close();
+      newTodoWindow = null;
+    }
   });
 });
 
@@ -148,11 +158,17 @@ function setMenuShortcut(param) {
     return process.platform == "darwin" ? "Command+N" : "Ctrl+N";
 }
 
-function createWindow(title) {
+function createTodoWindow() {
   todoListWindow = new BrowserWindow({
-    title: title,
+    title: "Yapılacaklar Listesi",
     // width: 400,
     // height: 300,
+    //--- added to solve require issue in main.html ---
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    //-------------------------------------------------
   });
 
   todoListWindow.loadURL(
