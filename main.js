@@ -38,14 +38,26 @@ const mainMenuTemplate = [
     submenu: [
       {
         label: "Kaydet",
+        accelerator: setShortcut("save"),
+        role: "save", //pre-defined keyword
       },
       {
         label: "Çıkış",
+        accelerator: setShortcut("quit"),
+        role: "quit", //pre-defined keyword
       },
     ],
   },
   {
     label: "Ayarlar",
+    submenu: [
+      {
+        label: "Grafik Görünümü",
+      },
+      {
+        label: "Parametre Ayarla",
+      },
+    ],
   },
   {
     label: "Hakkında",
@@ -56,6 +68,32 @@ const mainMenuTemplate = [
 if (process.platform == "darwin") {
   mainMenuTemplate.unshift({
     label: app.getName(),
-    role: "TODO",
+    // role: "TODO",
   });
+}
+
+// Dev Tools modification
+if (process.env.NODE_ENV !== "production") {
+  mainMenuTemplate.push({
+    label: "Dev Tools",
+    submenu: [
+      {
+        label: "Aç",
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        },
+      },
+      {
+        label: "Yenile",
+        role: "reload", //pre-defined keyword
+      },
+    ],
+  });
+}
+
+function setShortcut(param) {
+  if (param == "save")
+    return process.platform == "darwin" ? "Command+S" : "Ctrl+S";
+  else if (param == "quit")
+    return process.platform == "darwin" ? "Command+Q" : "Ctrl+Q";
 }
