@@ -13,5 +13,5 @@ sendBtn.addEventListener("click", () => {
 });
 
 newWindowBtn.addEventListener("click", () => {
-  ipcRenderer.send("key:newWindowBtn");
+  ipcRenderer.send("key:openTodoListBtn");
 });

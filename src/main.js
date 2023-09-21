@@ -29,7 +29,7 @@ app.on("ready", () => {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "../template/main.html"),
+      pathname: path.join(__dirname, "../templates/main.html"),
       protocol: "file:",
       slashes: true, // manage slash (/) for windows and linux based OS >> file://electron/main.html
     })
@@ -45,9 +45,9 @@ app.on("ready", () => {
     else console.log("No data!");
   });
 
-  ipcMain.on("key:newWindowBtn", () => {
+  ipcMain.on("key:openTodoListBtn", () => {
     //console.log("new");
-    createWindow();
+    createWindow("Yapılacaklar Listesi");
   });
 
   // Catching main window's close event (kill all processes)
@@ -86,6 +86,9 @@ const mainMenuTemplate = [
   },
   {
     label: "Hakkında",
+    click() {
+      createAboutWindow();
+    },
   },
 ];
 
@@ -123,23 +126,45 @@ function setShortcut(param) {
     return process.platform == "darwin" ? "Command+Q" : "Ctrl+Q";
 }
 
-function createWindow() {
-  parameterWindow = new BrowserWindow({
-    title: "Parameters",
-    width: 400,
-    height: 300,
+function createWindow(title) {
+  newWindow = new BrowserWindow({
+    title: title,
+    // width: 400,
+    // height: 300,
   });
 
-  parameterWindow.loadURL(
+  newWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "../template/parameters.html"),
+      pathname: path.join(__dirname, "../templates/todoList.html"),
       protocol: "file:",
       slashes: true,
     })
   );
 
-  // catch parameterWindow's close event for deleting it from memory
-  parameterWindow.on("close", () => {
-    parameterWindow = null;
+  // catch newWindow's close event for deleting it from memory
+  newWindow.on("close", () => {
+    newWindow = null;
+  });
+}
+
+function createAboutWindow(title) {
+  newWindow = new BrowserWindow({
+    title: "Hakkında",
+    width: 350,
+    height: 150,
+    resizable: false,
+  });
+
+  newWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "../templates/about.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+
+  // catch newWindow's close event for deleting it from memory
+  newWindow.on("close", () => {
+    newWindow = null;
   });
 }
