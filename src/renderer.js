@@ -4,12 +4,12 @@
 const { ipcRenderer } = require("electron");
 
 let dataInput = document.querySelector("#data-input");
-let startBtn = document.getElementById("startBtn");
+let startBtn = document.getElementById("sendBtn");
 let newWindowBtn = document.getElementById("newWindowBtn");
 
-startBtn.addEventListener("click", () => {
+sendBtn.addEventListener("click", () => {
   // alert("Start Button clicked!");
-  ipcRenderer.send("key:startBtnBtnClicked", dataInput.value);
+  ipcRenderer.send("key:sendBtnClicked", dataInput.value);
 });
 
 newWindowBtn.addEventListener("click", () => {

@@ -29,7 +29,7 @@ app.on("ready", () => {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "main.html"),
+      pathname: path.join(__dirname, "../template/main.html"),
       protocol: "file:",
       slashes: true, // manage slash (/) for windows and linux based OS >> file://electron/main.html
     })
@@ -40,7 +40,7 @@ app.on("ready", () => {
   Menu.setApplicationMenu(mainMenu);
 
   // Catching events coming from main.html
-  ipcMain.on("key:startBtnBtnClicked", (err, data) => {
+  ipcMain.on("key:sendBtnClicked", (err, data) => {
     if (data) console.log(data);
     else console.log("No data!");
   });
@@ -132,7 +132,7 @@ function createWindow() {
 
   parameterWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "parameters.html"),
+      pathname: path.join(__dirname, "../template/parameters.html"),
       protocol: "file:",
       slashes: true,
     })
