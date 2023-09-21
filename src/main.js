@@ -5,13 +5,11 @@ const url = require("url");
 const path = require("path");
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
-let mainWindow;
+let mainWindow, aboutWindow, newTodoWindow;
 
 // Bootstrap 4.0.0 css file used in main.html
 
 app.on("ready", () => {
-  // console.log("App Started...");
-
   // Getting OS information (win32 -> Windows, darwin -> macOS, ...etc)
   // const os = process.platform;
   // console.log(os);
@@ -20,12 +18,15 @@ app.on("ready", () => {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    // added to solve require issue in main.html
+    //--- added to solve require issue in main.html ---
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
+    //-------------------------------------------------
   });
+
+  mainWindow.setResizable(false);
 
   mainWindow.loadURL(
     url.format({
@@ -46,8 +47,13 @@ app.on("ready", () => {
   });
 
   ipcMain.on("key:openTodoListBtn", () => {
-    //console.log("new");
     createWindow("Yapılacaklar Listesi");
+  });
+
+  // Catching events coming from newTodo.html
+  ipcMain.on("newTodoWindow:close", () => {
+    console.log("aloo");
+    // newTodoWindow.close(); // close new to do page
   });
 
   // Catching main window's close event (kill all processes)
@@ -61,29 +67,36 @@ const mainMenuTemplate = [
   {
     label: "Dosya",
     submenu: [
+      // {
+      //   label: "Kaydet",
+      //   accelerator: setShortcut("save"),
+      //   role: "save", //pre-defined keyword
+      // },
       {
-        label: "Kaydet",
-        accelerator: setShortcut("save"),
-        role: "save", //pre-defined keyword
+        label: "Yeni Ekle",
+        accelerator: setMenuShortcut("new"),
+        click() {
+          createNewTodoWindow();
+        },
       },
       {
         label: "Çıkış",
-        accelerator: setShortcut("quit"),
+        accelerator: setMenuShortcut("quit"),
         role: "quit", //pre-defined keyword
       },
     ],
   },
-  {
-    label: "Ayarlar",
-    submenu: [
-      {
-        label: "Grafik Görünümü",
-      },
-      {
-        label: "Parametre Ayarla",
-      },
-    ],
-  },
+  // {
+  //   label: "Ayarlar",
+  //   submenu: [
+  //     {
+  //       label: "Grafik Görünümü",
+  //     },
+  //     {
+  //       label: "Parametre Ayarla",
+  //     },
+  //   ],
+  // },
   {
     label: "Hakkında",
     click() {
@@ -119,21 +132,23 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-function setShortcut(param) {
+function setMenuShortcut(param) {
   if (param == "save")
     return process.platform == "darwin" ? "Command+S" : "Ctrl+S";
   else if (param == "quit")
     return process.platform == "darwin" ? "Command+Q" : "Ctrl+Q";
+  else if (param == "new")
+    return process.platform == "darwin" ? "Command+N" : "Ctrl+N";
 }
 
 function createWindow(title) {
-  newWindow = new BrowserWindow({
+  todoListWindow = new BrowserWindow({
     title: title,
     // width: 400,
     // height: 300,
   });
 
-  newWindow.loadURL(
+  todoListWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "../templates/todoList.html"),
       protocol: "file:",
@@ -141,21 +156,21 @@ function createWindow(title) {
     })
   );
 
-  // catch newWindow's close event for deleting it from memory
-  newWindow.on("close", () => {
-    newWindow = null;
+  // catch todoListWindow's close event for deleting it from memory
+  todoListWindow.on("close", () => {
+    todoListWindow = null;
   });
 }
 
-function createAboutWindow(title) {
-  newWindow = new BrowserWindow({
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
     title: "Hakkında",
     width: 350,
     height: 150,
     resizable: false,
   });
 
-  newWindow.loadURL(
+  aboutWindow.loadURL(
     url.format({
       pathname: path.join(__dirname, "../templates/about.html"),
       protocol: "file:",
@@ -163,8 +178,31 @@ function createAboutWindow(title) {
     })
   );
 
-  // catch newWindow's close event for deleting it from memory
-  newWindow.on("close", () => {
-    newWindow = null;
+  // catch aboutWindow's close event for deleting it from memory
+  aboutWindow.on("close", () => {
+    aboutWindow = null;
+  });
+}
+
+function createNewTodoWindow() {
+  newTodoWindow = new BrowserWindow({
+    title: "Yeni Todo Ekle",
+    width: 480,
+    height: 183,
+    resizable: false,
+    frame: false,
+  });
+
+  newTodoWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "../templates/newTodo.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+
+  // catch newTodoWindow's close event for deleting it from memory
+  newTodoWindow.on("close", () => {
+    newTodoWindow = null;
   });
 }
