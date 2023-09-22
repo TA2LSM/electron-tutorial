@@ -1,5 +1,12 @@
 const { ipcRenderer } = require("electron");
 
+document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
+  const quickTodoInput = document.querySelector("#quickTodoInput");
+
+  ipcRenderer.send("newTodoWindow:save", quickTodoInput.value);
+  quickTodoInput.value = null;
+});
+
 ipcRenderer.on("todoList:updated", (err, todoItem) => {
   // select todo container
   const todoContainer = document.querySelector(".todo-container");

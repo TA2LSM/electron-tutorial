@@ -73,13 +73,16 @@ app.on("ready", () => {
       todoList.push(todo);
       todoListWindow.webContents.send("todoList:updated", todo);
 
-      newTodoWindow.close();
-      newTodoWindow = null;
+      if (newTodoWindow) {
+        newTodoWindow.close();
+        newTodoWindow = null;
+      }
     }
   });
 
   ipcMain.on("todoListWindow:Reload", () => {
-    todoListWindow.webContents.reload();
+    // need to reload todo list window ??
+    // if (todoListWindow) todoListWindow.reload();
   });
 });
 
