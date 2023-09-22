@@ -1,7 +1,7 @@
 {
   "name": "electron-tutorial",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple todo app",
   "main": "./src/main.js",
   "scripts": {
     "start": "electron .",

@@ -1,10 +1,6 @@
 const { ipcRenderer } = require("electron");
 
-checkTodoListEmpty();
-
 ipcRenderer.on("todoList:updated", (err, todoItem) => {
-  // console.log(todoItems);
-
   // select todo container
   const todoContainer = document.querySelector(".todo-container");
 
@@ -30,9 +26,10 @@ ipcRenderer.on("todoList:updated", (err, todoItem) => {
   todoButtonErase.className = "btn btn-sm btn-outline-danger flex-shrink-1";
   todoButtonErase.innerText = "Sil";
 
-  todoButtonErase.addEventListener("click", () => {
+  todoButtonErase.addEventListener("click", (el) => {
     if (confirm("Silmek istediğinize emin misiniz?")) {
-      // erase todo item
+      el.target.parentNode.parentNode.remove(); // erase todo item
+      checkTodoListEmpty();
     }
   });
 
@@ -49,9 +46,10 @@ function checkTodoListEmpty() {
   const todoContainer = document.querySelector(".todo-container");
   const nodataContainer = document.querySelector(".nodata-container");
 
-  if (todoContainer.children.length === 0) {
-    nodataContainer.style.display = "block";
-  } else {
+  if (todoContainer.children.length !== 0) {
     nodataContainer.style.display = "none";
+  } else {
+    nodataContainer.style.display = "block";
+    ipcRenderer.send("todoListWindow:Reload");
   }
 }

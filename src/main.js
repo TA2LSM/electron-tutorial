@@ -1,10 +1,9 @@
 //----- Back-end Codes -----
 
+// Bootstrap 4.0.0 css file used in main.html
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
-
-// Bootstrap 4.0.0 css file used in main.html
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 let mainWindow, aboutWindow, todoListWindow, newTodoWindow;
@@ -39,14 +38,14 @@ app.on("ready", () => {
     })
   );
 
+  // Generate app menu
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
+
   // Catching main window's close event (kill all processes)
   mainWindow.on("close", () => {
     app.quit();
   });
-
-  // Generate app menu
-  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
-  Menu.setApplicationMenu(mainMenu);
 
   // Catching events coming from main.html
   ipcMain.on("key:sendBtnClicked", (err, data) => {
@@ -77,6 +76,10 @@ app.on("ready", () => {
       newTodoWindow.close();
       newTodoWindow = null;
     }
+  });
+
+  ipcMain.on("todoListWindow:Reload", () => {
+    todoListWindow.webContents.reload();
   });
 });
 
@@ -164,7 +167,7 @@ function createTodoWindow() {
     title: "Yapılacaklar Listesi",
     // width: 400,
     // height: 300,
-    //--- added to solve require issue in main.html ---
+    //--- added to solve require issue in xxx.html ---
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -215,7 +218,7 @@ function createNewTodoWindow() {
     height: 183,
     resizable: false,
     frame: false,
-    //--- added to solve require issue in main.html ---
+    //--- added to solve require issue in xxx.html ---
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
