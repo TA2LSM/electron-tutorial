@@ -66,12 +66,13 @@ app.on("ready", () => {
 
   ipcMain.on("newTodoWindow:save", (err, data) => {
     if (data) {
-      todoList.push({
+      let todo = {
         id: todoList.length + 1,
         text: data,
-      });
+      };
 
-      todoListWindow.webContents.send("todoList:updated", todoList);
+      todoList.push(todo);
+      todoListWindow.webContents.send("todoList:updated", todo);
 
       newTodoWindow.close();
       newTodoWindow = null;

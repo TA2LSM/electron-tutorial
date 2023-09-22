@@ -1,11 +1,12 @@
 const { ipcRenderer } = require("electron");
 
-ipcRenderer.on("todoList:updated", (err, todoItems) => {
+checkTodoListEmpty();
+
+ipcRenderer.on("todoList:updated", (err, todoItem) => {
   // console.log(todoItems);
 
   // select todo container
   const todoContainer = document.querySelector(".todo-container");
-  // const todoContainer = document.getElementById("todo-container");
 
   // Create elements under todo container
   const todoRow = document.createElement("div");
@@ -18,7 +19,7 @@ ipcRenderer.on("todoList:updated", (err, todoItems) => {
 
   const todoP = document.createElement("p");
   todoP.className = "m-0 w-100";
-  todoP.innerText = "Bu bir yapılacak listesi...";
+  todoP.innerText = todoItem.text;
 
   const todoButtonEdit = document.createElement("button");
   todoButtonEdit.className =
@@ -40,4 +41,17 @@ ipcRenderer.on("todoList:updated", (err, todoItems) => {
   todoCol.appendChild(todoButtonErase);
   todoRow.appendChild(todoCol);
   todoContainer.appendChild(todoRow);
+
+  checkTodoListEmpty();
 });
+
+function checkTodoListEmpty() {
+  const todoContainer = document.querySelector(".todo-container");
+  const nodataContainer = document.querySelector(".nodata-container");
+
+  if (todoContainer.children.length === 0) {
+    nodataContainer.style.display = "block";
+  } else {
+    nodataContainer.style.display = "none";
+  }
+}
