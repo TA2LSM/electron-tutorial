@@ -4,7 +4,7 @@ document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
   const quickTodoInput = document.querySelector("#quickTodoInput");
 
   ipcRenderer.send("newTodoWindow:save", quickTodoInput.value);
-  quickTodoInput.value = null;
+  quickTodoInput.value = "";
 });
 
 ipcRenderer.on("todoList:updated", (err, todoItem) => {
@@ -57,6 +57,7 @@ function checkTodoListEmpty() {
     nodataContainer.style.display = "none";
   } else {
     nodataContainer.style.display = "block";
-    ipcRenderer.send("todoListWindow:Reload");
   }
+
+  // ipcRenderer.send("todoListWindow:Reload");
 }

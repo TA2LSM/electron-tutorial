@@ -80,10 +80,10 @@ app.on("ready", () => {
     }
   });
 
-  ipcMain.on("todoListWindow:Reload", () => {
-    // need to reload todo list window ??
-    // if (todoListWindow) todoListWindow.reload();
-  });
+  // ipcMain.on("todoListWindow:Reload", () => {
+  //   // need to reload todo list window ??
+  //   // if (todoListWindow && todoList.length === 0) todoListWindow.reload();
+  // });
 });
 
 // In macOS this menu will be different because of macOS' menu structure
