@@ -15,9 +15,8 @@ document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
 
 // Catching events sended by xxx.webContents.send()
 ipcRenderer.on("todoList:updated", (err, data) => {
-  // data.item = todo {id: ... text: ...}
   createTodo(data);
-  if (data.numOfItems !== 0) checkTodoListEmpty(data.numOfItems);
+  checkTodoListEmpty();
 });
 
 ipcRenderer.on("todoList:printAll", (err, todoList) => {
@@ -32,6 +31,7 @@ function createTodo(data) {
   // Create elements under todo container
   const todoRow = document.createElement("div");
   todoRow.className = "row";
+  todoRow.setAttribute("key", data.id);
 
   const todoCol = document.createElement("div");
   todoCol.className =
@@ -40,7 +40,7 @@ function createTodo(data) {
 
   const todoP = document.createElement("p");
   todoP.className = "m-0 w-100";
-  todoP.innerText = data.item.text;
+  todoP.innerText = data.text;
 
   const todoButtonEdit = document.createElement("button");
   todoButtonEdit.className =
@@ -66,27 +66,22 @@ function createTodo(data) {
   // Add event listener to every single todo item
   todoButtonErase.addEventListener("click", (el) => {
     if (confirm("Silmek istediğinize emin misiniz?")) {
+      const elIdxToErase = el.target.parentNode.parentNode.getAttribute("key");
+      ipcRenderer.send("todoList:EraseItem", elIdxToErase);
+
       el.target.parentNode.parentNode.remove(); // erase todo item in html file
-      checkTodoListEmpty(data.numOfItems);
+      checkTodoListEmpty();
     }
   });
 }
 
-function checkTodoListEmpty(numOfItems) {
+function checkTodoListEmpty() {
+  const todoContainer = document.querySelector(".todo-container");
   const nodataContainer = document.querySelector(".nodata-container");
 
-  if (numOfItems !== 0) {
+  if (todoContainer.children.length !== 0) {
     nodataContainer.style.display = "none";
   } else {
     nodataContainer.style.display = "block";
   }
-
-  // const todoContainer = document.querySelector(".todo-container");
-  // const nodataContainer = document.querySelector(".nodata-container");
-
-  // if (todoContainer.children.length !== 0) {
-  //   nodataContainer.style.display = "none";
-  // } else {
-  //   nodataContainer.style.display = "block";
-  // }
 }

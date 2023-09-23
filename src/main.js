@@ -72,16 +72,18 @@ app.on("ready", () => {
 
       // todo.id, todo.text
       todoList.push(todo);
-      todoListWindow.webContents.send("todoList:updated", {
-        item: todo,
-        numOfItems: todoList.length,
-      });
+      todoListWindow.webContents.send("todoList:updated", todo);
 
       if (data.method === "newTodo") {
         newTodoWindow.close();
         newTodoWindow = null;
       }
     }
+  });
+
+  ipcMain.on("todoList:EraseItem", (err, elIdxToErase) => {
+    const newData = todoList.splice(elIdxToErase, 1);
+    todoList = [...newData];
   });
 });
 
