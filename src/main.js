@@ -1,6 +1,6 @@
 //----- Back-end Codes -----
+// Bootstrap 4.0.0 css file used in this project (assets/bootstrap.min.css)
 
-// Bootstrap 4.0.0 css file used in main.html
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
@@ -13,14 +13,13 @@ let todoList = [];
 
 app.on("ready", () => {
   // Getting OS information (win32 -> Windows, darwin -> macOS, ...etc)
-  // const os = process.platform;
-  // console.log(os);
+  // console.log(process.platform);
 
   // Create app window
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    //--- added to solve require issue in main.html ---
+    //--- added to solve require issue in html files --
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -47,7 +46,7 @@ app.on("ready", () => {
     app.quit();
   });
 
-  // Catching events coming from main.html
+  // Catching events coming from main.html sended by ipcRenderer.send()
   ipcMain.on("key:sendBtnClicked", (err, data) => {
     if (data) console.log(data);
     else console.log("No data!");
@@ -64,26 +63,26 @@ app.on("ready", () => {
   });
 
   ipcMain.on("newTodoWindow:save", (err, data) => {
+    // data.method, data.value
     if (data) {
       let todo = {
         id: todoList.length + 1,
-        text: data,
+        text: data.value,
       };
 
+      // todo.id, todo.text
       todoList.push(todo);
-      todoListWindow.webContents.send("todoList:updated", todo);
+      todoListWindow.webContents.send("todoList:updated", {
+        item: todo,
+        numOfItems: todoList.length,
+      });
 
-      if (newTodoWindow) {
+      if (data.method === "newTodo") {
         newTodoWindow.close();
         newTodoWindow = null;
       }
     }
   });
-
-  // ipcMain.on("todoListWindow:Reload", () => {
-  //   // need to reload todo list window ??
-  //   // if (todoListWindow && todoList.length === 0) todoListWindow.reload();
-  // });
 });
 
 // In macOS this menu will be different because of macOS' menu structure
@@ -170,7 +169,7 @@ function createTodoWindow() {
     title: "Yapılacaklar Listesi",
     // width: 400,
     // height: 300,
-    //--- added to solve require issue in xxx.html ---
+    //--- added to solve require issue in html files --
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -185,6 +184,12 @@ function createTodoWindow() {
       slashes: true,
     })
   );
+
+  // After window rendered print all todo list
+  todoListWindow.webContents.once("dom-ready", () => {
+    if (todoList.length !== 0)
+      todoListWindow.webContents.send("todoList:printAll", todoList);
+  });
 
   // catch todoListWindow's close event for deleting it from memory
   todoListWindow.on("close", () => {
@@ -221,7 +226,7 @@ function createNewTodoWindow() {
     height: 183,
     resizable: false,
     frame: false,
-    //--- added to solve require issue in xxx.html ---
+    //--- added to solve require issue in html files --
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

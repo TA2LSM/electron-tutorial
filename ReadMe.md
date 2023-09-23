@@ -7,7 +7,7 @@ Feel free to use all my codes and have fun!
 
 ## Features will be added
 - Serial port communication
-- Graphics interface
+- Graphics interface (data visualization)
 - Export/import parameters
 
 If you want to learn more about Electron.js, check the [Quick Start Guide](https://www.electronjs.org/docs/latest/tutorial/quick-start).
@@ -35,6 +35,6 @@ Some information about code structure
 - `package.json` - Points to the app's main file and lists its details and dependencies.
 - `main.js` - Starts the app (entry point) and creates a browser window to render main.html. This is the app's **main process**.
 - `main.html` - A web page to render first. This is the app's **renderer process**.
-- `nodemon.json` - Check this file and modify it for your settings **auto recompile**.
+- `nodemon.json` - Check this file and modify it for your own settings **auto recompile**.
 
 

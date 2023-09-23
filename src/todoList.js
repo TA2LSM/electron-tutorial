@@ -3,11 +3,29 @@ const { ipcRenderer } = require("electron");
 document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
   const quickTodoInput = document.querySelector("#quickTodoInput");
 
-  ipcRenderer.send("newTodoWindow:save", quickTodoInput.value);
-  quickTodoInput.value = "";
+  if (quickTodoInput.value.length !== 0) {
+    ipcRenderer.send("newTodoWindow:save", {
+      method: "quickTodo",
+      value: quickTodoInput.value,
+    });
+
+    quickTodoInput.value = "";
+  }
 });
 
-ipcRenderer.on("todoList:updated", (err, todoItem) => {
+// Catching events sended by xxx.webContents.send()
+ipcRenderer.on("todoList:updated", (err, data) => {
+  // data.item = todo {id: ... text: ...}
+  createTodo(data);
+  if (data.numOfItems !== 0) checkTodoListEmpty(data.numOfItems);
+});
+
+ipcRenderer.on("todoList:printAll", (err, todoList) => {
+  document.querySelector(".nodata-container").style.display = "none";
+  todoList.map((item) => createTodo(item));
+});
+
+function createTodo(data) {
   // select todo container
   const todoContainer = document.querySelector(".todo-container");
 
@@ -22,7 +40,7 @@ ipcRenderer.on("todoList:updated", (err, todoItem) => {
 
   const todoP = document.createElement("p");
   todoP.className = "m-0 w-100";
-  todoP.innerText = todoItem.text;
+  todoP.innerText = data.item.text;
 
   const todoButtonEdit = document.createElement("button");
   todoButtonEdit.className =
@@ -33,12 +51,11 @@ ipcRenderer.on("todoList:updated", (err, todoItem) => {
   todoButtonErase.className = "btn btn-sm btn-outline-danger flex-shrink-1";
   todoButtonErase.innerText = "Sil";
 
-  todoButtonErase.addEventListener("click", (el) => {
-    if (confirm("Silmek istediğinize emin misiniz?")) {
-      el.target.parentNode.parentNode.remove(); // erase todo item
-      checkTodoListEmpty();
-    }
-  });
+  todoCol.appendChild(todoP);
+  todoCol.appendChild(todoButtonEdit);
+  todoCol.appendChild(todoButtonErase);
+  todoRow.appendChild(todoCol);
+  todoContainer.appendChild(todoRow);
 
   todoCol.appendChild(todoP);
   todoCol.appendChild(todoButtonEdit);
@@ -46,18 +63,30 @@ ipcRenderer.on("todoList:updated", (err, todoItem) => {
   todoRow.appendChild(todoCol);
   todoContainer.appendChild(todoRow);
 
-  checkTodoListEmpty();
-});
+  // Add event listener to every single todo item
+  todoButtonErase.addEventListener("click", (el) => {
+    if (confirm("Silmek istediğinize emin misiniz?")) {
+      el.target.parentNode.parentNode.remove(); // erase todo item in html file
+      checkTodoListEmpty(data.numOfItems);
+    }
+  });
+}
 
-function checkTodoListEmpty() {
-  const todoContainer = document.querySelector(".todo-container");
+function checkTodoListEmpty(numOfItems) {
   const nodataContainer = document.querySelector(".nodata-container");
 
-  if (todoContainer.children.length !== 0) {
+  if (numOfItems !== 0) {
     nodataContainer.style.display = "none";
   } else {
     nodataContainer.style.display = "block";
   }
 
-  // ipcRenderer.send("todoListWindow:Reload");
+  // const todoContainer = document.querySelector(".todo-container");
+  // const nodataContainer = document.querySelector(".nodata-container");
+
+  // if (todoContainer.children.length !== 0) {
+  //   nodataContainer.style.display = "none";
+  // } else {
+  //   nodataContainer.style.display = "block";
+  // }
 }
