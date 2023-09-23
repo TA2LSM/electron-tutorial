@@ -82,8 +82,7 @@ app.on("ready", () => {
   });
 
   ipcMain.on("todoList:EraseItem", (err, elIdxToErase) => {
-    const newData = todoList.splice(elIdxToErase, 1);
-    todoList = [...newData];
+    delete todoList[elIdxToErase - 1];
   });
 });
 

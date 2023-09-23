@@ -9,6 +9,7 @@ sendBtn.addEventListener("click", () => {
   // alert("Start Button clicked!");
   ipcRenderer.send("key:sendBtnClicked", dataInput.value);
   dataInput.value = "";
+  dataInput.focus();
 });
 
 showTodoListBtn.addEventListener("click", () => {

@@ -10,6 +10,7 @@ document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
     });
 
     quickTodoInput.value = "";
+    quickTodoInput.focus();
   }
 });
 
