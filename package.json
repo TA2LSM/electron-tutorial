@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "electron": "^26.2.2",
-    "serialport": "^10.3.0",
-    "nodemon": "^3.0.1"
+    "jquery": "^3.7.1",
+    "nodemon": "^3.0.1",
+    "popper.js": "^1.16.1",
+    "serialport": "^10.3.0"
   }
 }

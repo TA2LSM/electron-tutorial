@@ -8,6 +8,9 @@ const path = require("path");
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 let mainWindow, aboutWindow, todoListWindow, newTodoWindow;
 
+// let $ = jQuery = require('jquery');
+// const datepicker = require('js-datepicker')
+
 // temporary list
 let todoList = [];
 
@@ -46,6 +49,7 @@ app.on("ready", () => {
 
   // Catching main window's close event (kill all processes)
   mainWindow.on("close", () => {
+    // ADD: clearTimeout() for serial port scanner !!!!!!!!!!!!!!
     app.quit();
   });
 
