@@ -11,16 +11,16 @@
 
 <body>   
   <!-- Front-end Codes -->
-  <div class="container pt-3 text-center">
+  <div class="container pt-3 pl-0 pr-0 text-center">
     <h4 class="text-center">Electron.js Tutorial</h4>
     
-    <div class="row pt-2 justify-content-center">
+    <div class="row pt-2 pl-0 pr-0 justify-content-center">
       <div class="col-md-5">
         <button class="btn-block btn btn-warning" id="showTodoListBtn">Yapılacak Listesini Görüntüle</button>
       </div>
     </div>
 
-    <div class="row pt-3 align-items-center">
+    <div class="row pt-3 pl-0 pr-0 align-items-center">
       <div class="col d-flex justify-content-between">
         <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin..." autofocus>
         <button class="btn btn-primary flex-shrink-1 bi bi-terminal" id="sendBtn"> Konsol</button>
@@ -28,15 +28,13 @@
     </div>
   </div>
 
-  <div class="container pt-4">
+  <div class="container pl-0 pr-0 pt-4">
     <div class="row justify-content-center" style="background-color: bisque";>
 
-      <div class="col-md-5 mr-2">
-        <div class="row align-items-center justify-content-between pl-2 pt-1">
-          <b>Seri Port:</b>
-
+      <div class="col-md-6 mr-2">
+        <div class="row pl-1 pt-1 align-items-center">
           <div class="btn-group">
-            <button type="button" style="width: 100px;" class="btn btn-success dropdown-toggle ml-3 bi bi-usb-symbol"
+            <button type="button" style="width: 100%; overflow: hidden;" class="btn btn-success dropdown-toggle bi bi-usb-symbol"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList" disabled>
               Port
             </button>
@@ -58,27 +56,22 @@
               <tr>
                 <th scope="row">Port</th>
                 <td id="table-device-port-number"></td>
-                <!-- <td id="table-device-port-number">COM3</td> -->
               </tr>
               <tr>
                 <th scope="row">Adı</th>
                 <td id="table-device-name"></td>
-                <!-- <td id="table-device-name">USB-SERIAL CH340 (COM3)</td> -->
               </tr>
               <tr>
                 <th scope="row">Üretici</th>
                 <td id="table-device-manufacturer"></td>
-                <!-- <td id="table-device-manufacturer">wch.cn</td> -->
               </tr>
               <tr>
                 <th scope="row">Seri No</th>
                 <td id="table-device-serial-number"></td>
-                <!-- <td id="table-device-serial-number">5&c1bd4d0&0&8</td> -->
               </tr>
               <tr>
                 <th scope="row">Yol</th>
                 <td id="table-device-locationId"></td>
-                <!-- <td id="table-device-locationId">Port_#0008.Hub_#0002</td> -->
               </tr>
             </tbody>
           </table>
@@ -90,8 +83,8 @@
           <textarea class="w-100" style="resize: none; font-size: small;" name="dataTerminal" id="data-terminal" cols="30" rows="20" readonly wrap></textarea>
         </div>
 
-        <div class="row pt-1 pb-1">
-          <div class="col d-flex">
+        <div class="row pt-1 pb-1 align-items-center">
+          <div class="col d-flex pl-0 pr-1 justify-content-between">
             <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin...">
             <button class="btn btn-primary flex-shrink-1 bi bi-send" id="serialSendBtn"> Gönder</button>
           </div>

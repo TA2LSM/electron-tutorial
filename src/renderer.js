@@ -10,13 +10,17 @@ const serialPortDropdownMenu = document.getElementById(
 );
 const dataTerminal = document.getElementById("data-terminal");
 
+let availableSerialPorts = [];
+
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
     if (err) {
       dataTerminal.innerText = err.message;
       return;
     } else {
-      makeSerialPortList(ports);
+      availableSerialPorts = [...ports];
+      // console.log(availableSerialPorts);
+      makeSerialPortList(availableSerialPorts);
     }
   });
 }
@@ -61,7 +65,7 @@ function makeSerialPortList(ports) {
 
         //-- ADD SORTING HERE!
 
-        dataTerminal.innerText = "\r\n" + e.path + " bulundu...\r\n"; // ????
+        dataTerminal.innerText = '\r\n"' + e.path + '" bulundu...\r\n'; // ????
       }
     });
   }
@@ -92,7 +96,23 @@ showTodoListBtn.addEventListener("click", () => {
 });
 
 serialPortDropdownMenu.addEventListener("click", () => {
-  // comPortList.innerText = " COM3";
+  comPortList.innerText = " " + serialPortDropdownMenu.lastChild.innerText;
+
+  const detailedInfo = availableSerialPorts.find(
+    ({ path }) => path === serialPortDropdownMenu.lastChild.innerText
+  );
+
+  document.getElementById("table-device-port-number").innerText =
+    detailedInfo.path ? detailedInfo.path : "N/A";
+  document.getElementById("table-device-name").innerText =
+    detailedInfo.productId ? detailedInfo.productId : "N/A";
+  document.getElementById("table-device-manufacturer").innerText =
+    detailedInfo.maanufacturer ? detailedInfo.maanufacturer : "N/A";
+  document.getElementById("table-device-serial-number").innerText =
+    detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
+  document.getElementById("table-device-locationId").innerText =
+    detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
+
   // dataTerminal.innerText = "aa";
   // console.log("aaa");
   // console.log(
@@ -105,5 +125,5 @@ serialPortDropdownMenu.addEventListener("click", () => {
   //   .find(".dropdown-toggle")
   //   .html(selText + ' <span class="caret"></span>');
   // ??????????????????????
-  // console.log(serialPortDropdownMenu.find(".dropdown-item"));
+  // console.log(serialPortDropdownMenu.lastChild.innerText);
 });
