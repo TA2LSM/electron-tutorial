@@ -10,6 +10,7 @@
 </head>
 
 <body>   
+  <!-- Front-end Codes -->
   <div class="container pt-3 text-center">
     <h4 class="text-center">Electron.js Tutorial</h4>
     
@@ -33,14 +34,15 @@
       <div class="col-md-5 mr-2">
         <div class="row align-items-center justify-content-between pl-2 pt-1">
           <b>Seri Port:</b>
+
           <div class="btn-group">
             <button type="button" style="width: 100px;" class="btn btn-success dropdown-toggle ml-3 bi bi-usb-symbol"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList">
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList" disabled>
               Port
             </button>
-            <div class="dropdown-menu" id="serial-port-dropdown-menu">
-              <a class="dropdown-item">-YOK-</a>
-            </div>
+            <ul class="dropdown-menu dropdown-menu-right" id="serial-port-dropdown-menu">
+              <!-- <a class="dropdown-item">-YOK-</a> -->
+            </ul>
           </div>          
         </div>
 
@@ -110,7 +112,7 @@
   <!-- Include order: jQuery first, then Popper.js (umd version), then Bootstrap.js -->
   <script src="../assets/jquery.slim.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
   <script src="../assets/popper.min.js"></script>
-  
+
   <!-- <script src="../assets/bootstrap.js"></script> -->
   <script src="../assets/bootstrap.min.js"></script>
   <!-- <script src="../assets/bootstrap.bundle.min.js"></script> -->

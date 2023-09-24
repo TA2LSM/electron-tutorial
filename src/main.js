@@ -1,6 +1,7 @@
 //----- Back-end Codes -----
 /**
  * Bootstrap 4.0.0 css file used in this project
+ * Bootstrap icons >> https://icons.getbootstrap.com/
  * jQuery v3.7.1 slim. min >> https://releases.jquery.com/
  * Popper v1.16.1 (umd) min >> https://unpkg.com/browse/popper.js@1.16.1/
  */
@@ -152,6 +153,7 @@ if (process.env.NODE_ENV !== "production") {
     submenu: [
       {
         label: "Aç",
+        accelerator: setMenuShortcut("devTools"),
         click(item, focusedWindow) {
           focusedWindow.toggleDevTools();
         },
@@ -171,6 +173,8 @@ function setMenuShortcut(param) {
     return process.platform == "darwin" ? "Command+Q" : "Ctrl+Q";
   else if (param == "new")
     return process.platform == "darwin" ? "Command+N" : "Ctrl+N";
+  else if (param == "devTools")
+    return process.platform == "darwin" ? "Command+D" : "Ctrl+D";
 }
 
 function createTodoWindow() {

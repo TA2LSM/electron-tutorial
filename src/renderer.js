@@ -1,10 +1,19 @@
 const { ipcRenderer } = require("electron");
 const { SerialPort } = require("serialport");
 
+const sendBtn = document.getElementById("sendBtn");
+const showTodoListBtn = document.getElementById("showTodoListBtn");
+
+const comPortList = document.getElementById("comPortList");
+const serialPortDropdownMenu = document.getElementById(
+  "serial-port-dropdown-menu"
+);
+const dataTerminal = document.getElementById("data-terminal");
+
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
     if (err) {
-      // document.getElementById("error").textContent = err.message;
+      dataTerminal.innerText = err.message;
       return;
     } else {
       makeSerialPortList(ports);
@@ -13,27 +22,23 @@ async function listSerialPorts() {
 }
 
 function makeSerialPortList(ports) {
-  const serialPortDropdownMenu = document.getElementById(
-    "serial-port-dropdown-menu"
-  );
+  const comPortList = document.getElementById("comPortList");
 
+  const ListItem = document.createElement("li");
   const newItem = document.createElement("a");
   newItem.className = "dropdown-item";
 
-  if (ports.length === 0 && serialPortDropdownMenu.children.length !== 0) {
-    if (
-      serialPortDropdownMenu.children.length === 1 &&
-      serialPortDropdownMenu.children[0].innerText === "-YOK-"
-    )
-      return;
-
-    while (serialPortDropdownMenu.firstChild) {
-      serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
+  if (ports.length === 0) {
+    if (serialPortDropdownMenu.children.length !== 0) {
+      while (serialPortDropdownMenu.firstChild) {
+        serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
+      }
     }
 
-    newItem.innerText = "-YOK-";
-    serialPortDropdownMenu.appendChild(newItem);
+    comPortList.setAttribute("disabled", "");
   } else {
+    comPortList.removeAttribute("disabled");
+
     ports.map((e) => {
       const serialPortDropdownMenuItems = [...serialPortDropdownMenu.children];
       let allItems = [];
@@ -44,15 +49,19 @@ function makeSerialPortList(ports) {
         });
       }
 
-      if (allItems.includes("-YOK-") === true)
-        serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
-      else {
-        if (allItems.includes(e.path) === false) {
-          newItem.innerText = e.path;
-          serialPortDropdownMenu.appendChild(newItem);
+      if (allItems.includes(e.path) === false) {
+        newItem.innerText = e.path;
+        ListItem.id = e.path;
+        // newItem.addEventListener("click", () => {
+        //   ipcRenderer.send("comPortSelected", e.path);
+        // });
 
-          //-- ADD SORTING HERE!
-        }
+        ListItem.appendChild(newItem);
+        serialPortDropdownMenu.appendChild(ListItem);
+
+        //-- ADD SORTING HERE!
+
+        dataTerminal.innerText = "\r\n" + e.path + " bulundu...\r\n"; // ????
       }
     });
   }
@@ -68,8 +77,6 @@ function listPorts() {
 setTimeout(listPorts, 2000);
 
 //-----------------------------------------------------------------------
-const sendBtn = document.getElementById("sendBtn");
-const showTodoListBtn = document.getElementById("showTodoListBtn");
 
 sendBtn.addEventListener("click", () => {
   const dataInput = document.querySelector("#data-input");
@@ -82,4 +89,21 @@ sendBtn.addEventListener("click", () => {
 
 showTodoListBtn.addEventListener("click", () => {
   ipcRenderer.send("key:openTodoListBtn");
+});
+
+serialPortDropdownMenu.addEventListener("click", () => {
+  // comPortList.innerText = " COM3";
+  // dataTerminal.innerText = "aa";
+  // console.log("aaa");
+  // console.log(
+  //   serialPortDropdownMenu.options[serialPortDropdownMenu.selectedIndex].value
+  // );
+  // var selText = $(this).text();
+  // console.log(selText);
+  // $(this)
+  //   .parents(".btn-group")
+  //   .find(".dropdown-toggle")
+  //   .html(selText + ' <span class="caret"></span>');
+  // ??????????????????????
+  // console.log(serialPortDropdownMenu.find(".dropdown-item"));
 });
