@@ -1,8 +1,8 @@
 //----- Back-end Codes -----
 /**
  * Bootstrap 4.0.0 css file used in this project
- * jQuery 3.x files >> https://releases.jquery.com/
- * Popper files >> https://unpkg.com/browse/popper.js@1.16.1/
+ * jQuery v3.7.1 slim. min >> https://releases.jquery.com/
+ * Popper v1.16.1 (umd) min >> https://unpkg.com/browse/popper.js@1.16.1/
  */
 
 const electron = require("electron");
@@ -11,9 +11,6 @@ const path = require("path");
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
 let mainWindow, aboutWindow, todoListWindow, newTodoWindow;
-
-// let $ = jQuery = require('jquery');
-// const datepicker = require('js-datepicker')
 
 // temporary list
 let todoList = [];

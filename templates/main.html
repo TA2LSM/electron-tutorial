@@ -108,11 +108,12 @@
   </div>
   
   <!-- Include order: jQuery first, then Popper.js (umd version), then Bootstrap.js -->
-  <script src="../assets/jquery-3.7.1.slim.min.js"></script>
-  <script src="../assets/popper-1.16.1-umd.min.js"></script>
+  <script src="../assets/jquery.slim.min.js" onload="window.$ = window.jQuery = module.exports;"></script>
+  <script src="../assets/popper.min.js"></script>
+  
+  <!-- <script src="../assets/bootstrap.js"></script> -->
   <script src="../assets/bootstrap.min.js"></script>
   <!-- <script src="../assets/bootstrap.bundle.min.js"></script> -->
-  <!-- <script src="../node_modules/jquery/dist/jquery.slim.min.js" onload="window.$ = window.jQuery = module.exports;" asp-append-version="true"></script> -->
   
   <!-- User scripts are need to be in here at last line of code -->
   <script src="../src/renderer.js"></script>  

@@ -10,6 +10,3 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("serialport-version").innerText =
     require("serialport/package").version;
 });
-
-// window.$ = require("jquery");
-// window.$ = window.jQuery = module.exports;
