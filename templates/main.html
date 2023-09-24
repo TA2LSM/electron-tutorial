@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/bootstrap.min.css">
+  <link rel="stylesheet" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
   <title>Electron.js Tutorial</title>
 </head>
 
@@ -21,7 +22,7 @@
     <div class="row pt-3 align-items-center">
       <div class="col d-flex justify-content-between">
         <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin..." autofocus>
-        <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder (App Konsol)</button>
+        <button class="btn btn-primary flex-shrink-1 bi bi-terminal" id="sendBtn"> Konsol</button>
       </div>
     </div>
   </div>
@@ -33,12 +34,12 @@
         <div class="row align-items-center justify-content-between pl-2 pt-1">
           <b>Seri Port:</b>
           <div class="btn-group">
-            <button type="button" style="width: 100px;" class="btn btn-success dropdown-toggle ml-3"
+            <button type="button" style="width: 100px;" class="btn btn-success dropdown-toggle ml-3 bi bi-usb-symbol"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList">
               Port
             </button>
             <div class="dropdown-menu" id="serial-port-dropdown-menu">
-              <!-- <a class="dropdown-item" href="#">COM3</a> -->
+              <a class="dropdown-item">-YOK-</a>
             </div>
           </div>          
         </div>
@@ -90,7 +91,7 @@
         <div class="row pt-1 pb-1">
           <div class="col d-flex">
             <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin...">
-            <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder</button>
+            <button class="btn btn-primary flex-shrink-1 bi bi-send" id="serialSendBtn"> Gönder</button>
           </div>
         </div>
       </div>
@@ -106,11 +107,14 @@
     </div>
   </div>
   
-  <!-- Scripts are need to be in here at last line of code -->
+  <!-- Include order: jQuery first, then Popper.js (umd version), then Bootstrap.js -->
+  <script src="../assets/jquery-3.7.1.slim.min.js"></script>
+  <script src="../assets/popper-1.16.1-umd.min.js"></script>
   <script src="../assets/bootstrap.min.js"></script>
-  <script src="../node_modules/popper.js/dist/popper.min.js"></script>
-  <script src="../node_modules/jquery/dist/jquery.slim.min.js"></script>
-  <!-- <script src="../node_modules/jquery/dist/jquery.min.js" onload="window.$ = window.jQuery = module.exports;" asp-append-version="true"></script> -->
+  <!-- <script src="../assets/bootstrap.bundle.min.js"></script> -->
+  <!-- <script src="../node_modules/jquery/dist/jquery.slim.min.js" onload="window.$ = window.jQuery = module.exports;" asp-append-version="true"></script> -->
+  
+  <!-- User scripts are need to be in here at last line of code -->
   <script src="../src/renderer.js"></script>  
 </body>
 

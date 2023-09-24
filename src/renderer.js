@@ -17,10 +17,22 @@ function makeSerialPortList(ports) {
     "serial-port-dropdown-menu"
   );
 
-  if (ports.length === 0) {
+  const newItem = document.createElement("a");
+  newItem.className = "dropdown-item";
+
+  if (ports.length === 0 && serialPortDropdownMenu.children.length !== 0) {
+    if (
+      serialPortDropdownMenu.children.length === 1 &&
+      serialPortDropdownMenu.children[0].innerText === "-YOK-"
+    )
+      return;
+
     while (serialPortDropdownMenu.firstChild) {
       serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
     }
+
+    newItem.innerText = "-YOK-";
+    serialPortDropdownMenu.appendChild(newItem);
   } else {
     ports.map((e) => {
       const serialPortDropdownMenuItems = [...serialPortDropdownMenu.children];
@@ -32,14 +44,15 @@ function makeSerialPortList(ports) {
         });
       }
 
-      if (allItems.includes(e.path) === false) {
-        const item = document.createElement("a");
-        item.className = "dropdown-item";
-        item.innerText = e.path;
+      if (allItems.includes("-YOK-") === true)
+        serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
+      else {
+        if (allItems.includes(e.path) === false) {
+          newItem.innerText = e.path;
+          serialPortDropdownMenu.appendChild(newItem);
 
-        serialPortDropdownMenu.appendChild(item);
-
-        //-- ADD SORTING HERE!
+          //-- ADD SORTING HERE!
+        }
       }
     });
   }

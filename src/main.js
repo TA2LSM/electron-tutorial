@@ -1,5 +1,9 @@
 //----- Back-end Codes -----
-// Bootstrap 4.0.0 css file used in this project (assets/bootstrap.min.css)
+/**
+ * Bootstrap 4.0.0 css file used in this project
+ * jQuery 3.x files >> https://releases.jquery.com/
+ * Popper files >> https://unpkg.com/browse/popper.js@1.16.1/
+ */
 
 const electron = require("electron");
 const url = require("url");
