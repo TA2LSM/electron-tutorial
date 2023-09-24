@@ -20,11 +20,12 @@ app.on("ready", () => {
     // fullscreen: true,
     // resizable: false,
     width: 800,
-    height: 600,
+    height: 720,
     //--- added to solve require issue in html files --
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: true, // to allow require
+      contextIsolation: false, // allow use with Electron 12+
+      preload: path.join(__dirname, "preload.js"),
     },
     //-------------------------------------------------
   });

@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "electron": "^26.2.2",
+    "serialport": "^10.3.0",
     "nodemon": "^3.0.1"
   }
 }

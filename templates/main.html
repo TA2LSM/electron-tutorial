@@ -24,14 +24,13 @@
         <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder (App Konsol)</button>
       </div>
     </div>
-
   </div>
 
   <div class="container pt-4">
     <div class="row justify-content-center" style="background-color: bisque";>
 
-      <div class="col-md-4 mr-2">
-        <div class="row align-items-center">
+      <div class="col-md-5 mr-2">
+        <div class="row align-items-center justify-content-between pl-2 pt-1">
           <b>Seri Port:</b>
           <div class="btn-group">
             <button type="button" class="btn btn-success dropdown-toggle ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList">
@@ -45,14 +44,43 @@
           </div>          
         </div>
 
-        <div class="row mt-2">
-          liste
+        <div class="row pl-1 mt-2">
+          <table class="table table-light">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">Bilgi</th>
+                <th scope="col">Açıklama</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Port</th>
+                <td id="table-device-port-number">COM3</td>
+              </tr>
+              <tr>
+                <th scope="row">Adı</th>
+                <td id="table-device-name">USB-SERIAL CH340 (COM3)</td>
+              </tr>
+              <tr>
+                <th scope="row">Üretici</th>
+                <td id="table-device-manufacturer">wch.cn</td>
+              </tr>
+              <tr>
+                <th scope="row">Seri No</th>
+                <td id="table-device-serial-number">5&c1bd4d0&0&8</td>
+              </tr>
+              <tr>
+                <th scope="row">Yol</th>
+                <td id="table-device-locationId">Port_#0008.Hub_#0002</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
       <div class="col w-100">
         <div class="row pt-1 pr-1">
-          <textarea class="w-100" style="resize: none;" name="dataTerminal" id="data-terminal" cols="30" rows="10"></textarea>
+          <textarea class="w-100" style="resize: none; font-size: small;" name="dataTerminal" id="data-terminal" cols="30" rows="20"></textarea>
         </div>
 
         <div class="row pt-1 pb-1">
@@ -64,6 +92,13 @@
       </div>
       
 
+    </div>
+
+    <div class="row pt-1 align-items-center justify-content-center">
+      <b>Node</b>&nbsp;v<span id="node-version"></span>,&nbsp;
+      <b>Chromium</b>&nbsp;v<span id="chrome-version"></span>,&nbsp;
+      <b>Electron</b>&nbsp;v<span id="electron-version"></span>,&nbsp;
+      <b>Serialport</b>&nbsp;v<span id="serialport-version"></span>
     </div>
   </div>
   
