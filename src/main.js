@@ -17,6 +17,8 @@ app.on("ready", () => {
 
   // Create app window
   mainWindow = new BrowserWindow({
+    // fullscreen: true,
+    // resizable: false,
     width: 800,
     height: 600,
     //--- added to solve require issue in html files --
@@ -27,7 +29,7 @@ app.on("ready", () => {
     //-------------------------------------------------
   });
 
-  mainWindow.setResizable(false);
+  // mainWindow.setResizable(false);
 
   mainWindow.loadURL(
     url.format({
@@ -69,10 +71,10 @@ app.on("ready", () => {
         id: todoList.length + 1,
         text: data.value,
       };
-
-      // todo.id, todo.text
       todoList.push(todo);
-      todoListWindow.webContents.send("todoList:updated", todo);
+
+      if (todoListWindow)
+        todoListWindow.webContents.send("todoList:updated", todo);
 
       if (data.method === "newTodo") {
         newTodoWindow.close();

@@ -3,28 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="../assets/bootstrap.min.css">
   <title>Electron.js Tutorial</title>
 </head>
 
 <body>   
-  <div class="container pt-5">
+  <div class="container pt-3 text-center">
     <h4 class="text-center">Electron.js Tutorial</h4>
-    <div class="row">
-      <div class="d-flex col-md-8 offset-2 pt-2">
-        <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin..." autofocus>
-        <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder (Konsol)</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-8 offset-2 pt-2">
+    
+    <div class="row pt-2 justify-content-center">
+      <div class="col-md-5">
         <button class="btn-block btn btn-warning" id="showTodoListBtn">Yapılacak Listesini Görüntüle</button>
       </div>
+    </div>
+
+    <div class="row pt-3 align-items-center">
+      <div class="col d-flex justify-content-between">
+        <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin..." autofocus>
+        <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder (App Konsol)</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="container pt-4">
+    <div class="row justify-content-center" style="background-color: bisque";>
+
+      <div class="col-md-4 mr-2">
+        <div class="row align-items-center">
+          <b>Seri Port:</b>
+          <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle ml-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList">
+              Port
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+          </div>          
+        </div>
+
+        <div class="row mt-2">
+          liste
+        </div>
+      </div>
+
+      <div class="col w-100">
+        <div class="row pt-1 pr-1">
+          <textarea class="w-100" style="resize: none;" name="dataTerminal" id="data-terminal" cols="30" rows="10"></textarea>
+        </div>
+
+        <div class="row pt-1 pb-1">
+          <div class="col d-flex">
+            <input class="w-100 mr-2" type="text" id="data-input" placeholder="Veri girin...">
+            <button class="btn btn-primary flex-shrink-1" id="sendBtn">Gönder</button>
+          </div>
+        </div>
+      </div>
+      
+
     </div>
   </div>
   
   <!-- Scripts are need to be in here at last line of code -->
-  <script type="module" src="../src/renderer.js"></script>  
+  <script src="../assets/bootstrap.min.js"></script>
+  <script src="../src/renderer.js"></script>  
 </body>
 
 </html>
