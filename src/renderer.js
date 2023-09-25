@@ -102,16 +102,17 @@ serialPortDropdownMenu.addEventListener("click", () => {
     ({ path }) => path === serialPortDropdownMenu.lastChild.innerText
   );
 
+  console.log(detailedInfo);
   document.getElementById("table-device-port-number").innerText =
     detailedInfo.path ? detailedInfo.path : "N/A";
   document.getElementById("table-device-name").innerText =
-    detailedInfo.productId ? detailedInfo.productId : "N/A";
+    detailedInfo.friendlyName ? detailedInfo.friendlyName : "N/A";
   document.getElementById("table-device-manufacturer").innerText =
-    detailedInfo.maanufacturer ? detailedInfo.maanufacturer : "N/A";
+    detailedInfo.manufacturer ? detailedInfo.manufacturer : "N/A";
   document.getElementById("table-device-serial-number").innerText =
     detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
   document.getElementById("table-device-locationId").innerText =
-    detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
+    detailedInfo.locationId ? detailedInfo.locationId : "N/A";
 
   // dataTerminal.innerText = "aa";
   // console.log("aaa");
