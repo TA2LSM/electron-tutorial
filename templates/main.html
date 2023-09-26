@@ -38,7 +38,7 @@
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="comPortList" disabled>
               Port
             </button>
-            <li class="dropdown-menu dropdown-menu-left" id="serial-port-dropdown-menu"></li>
+            <ul class="dropdown-menu dropdown-menu-left" id="serial-port-dropdown-menu"></ul>
           </div>          
         </div>
 
@@ -91,15 +91,20 @@
 
       <div class="col w-100">
         <div class="row pt-1 pr-1">
-          <textarea class="w-100" style="resize: none; font-size: small;" name="dataTerminal" id="data-terminal" cols="30" rows="20" readonly wrap></textarea>
+          <textarea class="w-100" style="resize: none; font-size: small;" name="dataTerminal" id="data-terminal" cols="30" rows="18" readonly wrap></textarea>
+        </div>
+
+        <div class="row pt-1 pr-1 d-flex justify-content-end">
+          <button class="btn btn-secondary flex-shrink-1 bi bi-trash" id="clearDataTerminalSendBtn"> Temizle</button>
         </div>
 
         <div class="row pt-1 pb-1 align-items-center">
           <div class="col d-flex pl-0 pr-1 justify-content-between">
-            <input class="w-100 mr-2" type="text" id="serialdata-input" placeholder="Veri girin...">
+            <input class="w-100 mr-2" type="text" id="serialdata-input" placeholder="Veri girin..." disabled>
             <button class="btn btn-primary flex-shrink-1 bi bi-send" id="serialSendBtn" disabled> Gönder</button>
           </div>
         </div>
+
       </div>     
 
     </div>

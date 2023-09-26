@@ -11,6 +11,10 @@ const serialPortDropdownMenu = document.getElementById(
 const serialDataInput = document.getElementById("serialdata-input");
 const serialSendBtn = document.getElementById("serialSendBtn");
 const serialCloseBtn = document.getElementById("serial-port-close-btn");
+
+const clearDataTerminalSendBtn = document.getElementById(
+  "clearDataTerminalSendBtn"
+);
 const dataTerminal = document.getElementById("data-terminal");
 
 let availableSerialPorts = [];
@@ -21,62 +25,156 @@ let dataTerminalContent = [];
 //-----------------------------------------------------------------------
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
+    const comPortList = document.getElementById("comPortList");
+
     if (err) {
-      dataTerminalPrint("HATA:", err.message);
+      dataTerminalPrint("HATA: ", err.message);
       return;
     } else {
       availableSerialPorts = [...ports];
-      makeSerialPortList(availableSerialPorts);
+
+      if (availableSerialPorts.length !== 0) {
+        if (availableSerialPorts.length > 1) {
+          // sort ports by ascending order of their names
+          availableSerialPorts.sort((first, second) =>
+            first.path.localeCompare(second.path)
+          );
+        }
+
+        makeSerialPortList(availableSerialPorts);
+        comPortList.removeAttribute("disabled");
+      } else {
+        comPortList.setAttribute("disabled", "");
+      }
     }
   });
 }
 
-function makeSerialPortList(ports) {
-  const comPortList = document.getElementById("comPortList");
-
+function makeSerialPortList(availableSerialPorts) {
   const ListItem = document.createElement("li");
   const newItem = document.createElement("a");
   newItem.className = "dropdown-item";
   newItem.href = "#";
 
-  if (ports.length === 0) {
-    if (serialPortDropdownMenu.children.length !== 0) {
-      while (serialPortDropdownMenu.firstChild) {
-        serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
-      }
-    }
+  let serialPortDropdownMenuItems =
+    serialPortDropdownMenu.children.length !== 0
+      ? [...serialPortDropdownMenu.children]
+      : [];
+  let listedSerialPortNames = [];
 
-    comPortList.setAttribute("disabled", "");
-  } else {
-    ports.map((e, idx) => {
-      const serialPortDropdownMenuItems = [...serialPortDropdownMenu.children];
-      let allItems = [];
+  // serialPortDropdownMenuItems = serialPortDropdownMenuItems.map((el) => {
+  //   if (availableSerialPorts.find(el.innerText) === true) return el;
+  // });
 
-      if (serialPortDropdownMenuItems.length !== 0) {
-        allItems = serialPortDropdownMenuItems.map((element) => {
-          return element.innerText;
-        });
-      }
-
-      if (allItems.includes(e.path) === false) {
-        newItem.innerText = e.path;
-
-        ListItem.id = idx;
-        ListItem.addEventListener("click", () => {
-          ipcRenderer.send("serialPort:Selected", ListItem.id);
-        });
-
-        ListItem.appendChild(newItem);
-        serialPortDropdownMenu.appendChild(ListItem);
-
-        dataTerminalPrint('"' + e.path + '" bulundu.');
-
-        //-- ADD SORTING HERE! for serialPortDropdownMenuItems
-      }
+  if (serialPortDropdownMenuItems.length !== 0) {
+    listedSerialPortNames = serialPortDropdownMenuItems.map((el) => {
+      return el.innerText;
     });
 
-    comPortList.removeAttribute("disabled");
+    // sort by ascending order
+    // listedSerialPortNames.sort((first, second) => first.localeCompare(second));
   }
+
+  availableSerialPorts.map((el, idx) => {
+    if (listedSerialPortNames.includes(el.path) === false) {
+      newItem.innerText = el.path;
+
+      ListItem.id = idx;
+      ListItem.addEventListener("click", () => {
+        ipcRenderer.send("serialPort:Selected", ListItem.id);
+      });
+
+      ListItem.appendChild(newItem);
+      serialPortDropdownMenu.appendChild(ListItem);
+
+      dataTerminalPrint('"' + el.path + '" bulundu.');
+    }
+
+    // sort dropdown menu by ascending order
+    if (serialPortDropdownMenu.children.length !== 0) {
+      Array.from(serialPortDropdownMenu.getElementsByTagName("li"))
+        .sort((first, second) =>
+          first.innerText.localeCompare(second.innerText)
+        )
+        .forEach((li) => serialPortDropdownMenu.appendChild(li));
+    }
+  });
+
+  // Clean serialPortDropdownMenu
+  // while (serialPortDropdownMenu.childElementCount !== 0) {
+  //   serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
+  // }
+
+  // console.log(serialPortDropdownMenu);
+  // console.log(availableSerialPorts);
+
+  //   availableSerialPorts.map((el, idx) => {
+  //     newItem.innerText = el.path;
+
+  //     ListItem.id = idx;
+  //     ListItem.addEventListener("click", () => {
+  //       ipcRenderer.send("serialPort:Selected", ListItem.id);
+  //     });
+
+  //     ListItem.appendChild(newItem);
+  //     serialPortDropdownMenu.appendChild(ListItem);
+
+  //     dataTerminalPrint('"' + el.path + '" bulundu.');
+  //   });
+
+  //   comPortList.removeAttribute("disabled");
+
+  // availableSerialPorts.map((el, idx) => {
+  //   newItem.innerText = el.path;
+
+  //   ListItem.id = idx;
+  //   ListItem.addEventListener("click", () => {
+  //     ipcRenderer.send("serialPort:Selected", ListItem.id);
+  //   });
+
+  //   ListItem.appendChild(newItem);
+  //   serialPortDropdownMenu.appendChild(ListItem);
+
+  //   dataTerminalPrint('"' + el.path + '" bulundu.');
+  // });
+
+  //-----------------------
+  // if (availableSerialPorts.length === 0) {
+  //   if (serialPortDropdownMenu.children.length !== 0) {
+  //     while (serialPortDropdownMenu.childElementCount !== 0) {
+  //       serialPortDropdownMenu.removeChild(serialPortDropdownMenu.lastChild);
+  //     }
+  //   }
+
+  //   comPortList.setAttribute("disabled", "");
+  // } else {
+  //   const serialPortDropdownMenuItems = [...serialPortDropdownMenu.children];
+  //   let serialPortNames = [];
+
+  //   if (serialPortDropdownMenuItems.length !== 0) {
+  //     serialPortNames = serialPortDropdownMenuItems.map((el) => {
+  //       return el.innerText;
+  //     });
+  //   }
+
+  //   availableSerialPorts.map((el, idx) => {
+  //     if (serialPortNames.includes(el.path) === false) {
+  //       newItem.innerText = el.path;
+
+  //       ListItem.id = idx;
+  //       ListItem.addEventListener("click", () => {
+  //         ipcRenderer.send("serialPort:Selected", ListItem.id);
+  //       });
+
+  //       ListItem.appendChild(newItem);
+  //       serialPortDropdownMenu.appendChild(ListItem);
+
+  //       dataTerminalPrint('"' + el.path + '" bulundu.');
+  //     }
+  //   });
+
+  //   comPortList.removeAttribute("disabled");
+  // }
 }
 
 function listPorts() {
@@ -96,6 +194,11 @@ function dataTerminalPrint(newdata) {
   dataTerminal.innerHTML = dataTerminalContent;
 }
 
+clearDataTerminalSendBtn.addEventListener("click", () => {
+  dataTerminalContent = null;
+  dataTerminal.innerHTML = dataTerminalContent;
+});
+
 //-----------------------------------------------------------------------
 sendBtn.addEventListener("click", () => {
   const dataInput = document.querySelector("#data-input");
@@ -112,8 +215,7 @@ showTodoListBtn.addEventListener("click", () => {
 //-----------------------------------------------------------------------
 
 ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
-  comPortList.innerText =
-    " " + serialPortDropdownMenu.childNodes[selectedIdx].innerText;
+  comPortList.innerText = " " + availableSerialPorts[selectedIdx].path;
 
   const detailedInfo = { ...availableSerialPorts[selectedIdx] };
   // const detailedInfo = availableSerialPorts.find(
@@ -148,8 +250,6 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
         dataTerminalPrint("Alinan veri: " + data);
       });
 
-      console.log(selectedSerialPort);
-
       document.getElementById("serial-port-baudrate").innerText =
         selectedSerialPort.port.openOptions.baudRate + "bps";
       document.getElementById("serial-port-dataBits").innerText =
@@ -161,6 +261,7 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
       document.getElementById("serial-port-info").removeAttribute("hidden");
 
       comPortList.setAttribute("disabled", "");
+      document.getElementById("serialdata-input").removeAttribute("disabled");
       serialCloseBtn.removeAttribute("disabled");
       serialSendBtn.removeAttribute("disabled");
     });
@@ -185,6 +286,7 @@ serialCloseBtn.addEventListener("click", () => {
     serialCloseBtn.setAttribute("disabled", "");
     serialSendBtn.setAttribute("disabled", "");
     document.getElementById("serial-port-info").setAttribute("hidden", "");
+    document.getElementById("serialdata-input").setAttribute("disabled", "");
     comPortList.removeAttribute("disabled");
   });
 });
