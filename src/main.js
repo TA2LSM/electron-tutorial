@@ -93,6 +93,10 @@ app.on("ready", () => {
   ipcMain.on("todoList:EraseItem", (err, elIdxToErase) => {
     delete todoList[elIdxToErase - 1];
   });
+
+  ipcMain.on("serialPort:Selected", (err, selectedIdx) => {
+    mainWindow.webContents.send("serialPort:selectedIdx", selectedIdx);
+  });
 });
 
 // In macOS this menu will be different because of macOS' menu structure

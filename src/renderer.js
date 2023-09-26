@@ -8,11 +8,9 @@ const comPortList = document.getElementById("comPortList");
 const serialPortDropdownMenu = document.getElementById(
   "serial-port-dropdown-menu"
 );
-
 const serialDataInput = document.getElementById("serialdata-input");
 const serialSendBtn = document.getElementById("serialSendBtn");
 const serialCloseBtn = document.getElementById("serial-port-close-btn");
-
 const dataTerminal = document.getElementById("data-terminal");
 
 let availableSerialPorts = [];
@@ -20,6 +18,7 @@ let selectedSerialPort = null;
 
 let dataTerminalContent = [];
 
+//-----------------------------------------------------------------------
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
     if (err) {
@@ -39,6 +38,7 @@ function makeSerialPortList(ports) {
   const ListItem = document.createElement("li");
   const newItem = document.createElement("a");
   newItem.className = "dropdown-item";
+  newItem.href = "#";
 
   if (ports.length === 0) {
     if (serialPortDropdownMenu.children.length !== 0) {
@@ -49,9 +49,7 @@ function makeSerialPortList(ports) {
 
     comPortList.setAttribute("disabled", "");
   } else {
-    comPortList.removeAttribute("disabled");
-
-    ports.map((e) => {
+    ports.map((e, idx) => {
       const serialPortDropdownMenuItems = [...serialPortDropdownMenu.children];
       let allItems = [];
 
@@ -63,19 +61,22 @@ function makeSerialPortList(ports) {
 
       if (allItems.includes(e.path) === false) {
         newItem.innerText = e.path;
-        ListItem.id = e.path;
-        // newItem.addEventListener("click", () => {
-        //   ipcRenderer.send("comPortSelected", e.path);
-        // });
+
+        ListItem.id = idx;
+        ListItem.addEventListener("click", () => {
+          ipcRenderer.send("serialPort:Selected", ListItem.id);
+        });
 
         ListItem.appendChild(newItem);
         serialPortDropdownMenu.appendChild(ListItem);
 
-        //-- ADD SORTING HERE!
-
         dataTerminalPrint('"' + e.path + '" bulundu.');
+
+        //-- ADD SORTING HERE! for serialPortDropdownMenuItems
       }
     });
+
+    comPortList.removeAttribute("disabled");
   }
 }
 
@@ -96,10 +97,10 @@ function dataTerminalPrint(newdata) {
   dataTerminal.innerHTML = dataTerminalContent;
 }
 
+//-----------------------------------------------------------------------
 sendBtn.addEventListener("click", () => {
   const dataInput = document.querySelector("#data-input");
 
-  // alert("Start Button clicked!");
   ipcRenderer.send("key:sendBtnClicked", dataInput.value);
   dataInput.value = "";
   dataInput.focus();
@@ -110,11 +111,14 @@ showTodoListBtn.addEventListener("click", () => {
 });
 
 //-----------------------------------------------------------------------
-serialPortDropdownMenu.addEventListener("click", () => {
-  comPortList.innerText = " " + serialPortDropdownMenu.lastChild.innerText;
+
+ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
+  comPortList.innerText =
+    " " + serialPortDropdownMenu.childNodes[selectedIdx].innerText;
 
   const detailedInfo = availableSerialPorts.find(
-    ({ path }) => path === serialPortDropdownMenu.lastChild.innerText
+    ({ path }) =>
+      path === serialPortDropdownMenu.childNodes[selectedIdx].innerText
   );
 
   // console.log(detailedInfo);
