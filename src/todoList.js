@@ -14,6 +14,10 @@ document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
   }
 });
 
+document.getElementById("todoWindowCloseBtn").addEventListener("click", () => {
+  ipcRenderer.send("todoWindow:close");
+});
+
 // Catching events sended by xxx.webContents.send()
 ipcRenderer.on("todoList:updated", (err, data) => {
   createTodo(data);
@@ -36,7 +40,7 @@ function createTodo(data) {
 
   const todoCol = document.createElement("div");
   todoCol.className =
-    "p-2 mb-3 text-light bg-dark col-md-8 offset-2 shadow card d-flex flex-row justify-content-center align-items-center";
+    "p-2 mb-3 text-light bg-dark col-md shadow card d-flex flex-row justify-content-center align-items-center";
   todoCol.style = "background-color: #582E48!important";
 
   const todoP = document.createElement("p");

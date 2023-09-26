@@ -9,17 +9,17 @@
 </head>
 
 <body>
-  <div class="container main-container pt-5">
-
-    <h5 class="text-center">Hızlı Ekle</h5>
-    <div class="row">
-      <div class="col-md-6 offset-3 mt-1 d-flex">
-        <input type="text" class="form-control form-control-lg mr-1" id="quickTodoInput" autofocus>
-        <button class="btn btn-outline-dark" id="quickTodoAddBtn">Ekle</button>
-      </div>
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand text-white">Yapılacaklar</a>
+    <div class="col-md d-flex">
+      <input type="text" class="form-control form-control-md mr-2" id="quickTodoInput" autofocus>
+      <button class="btn btn-success mr-2" id="quickTodoAddBtn">Ekle</button>
+      <button class="btn btn-danger" id="todoWindowCloseBtn">Kapat</button>
     </div>
-
-    <h5 class="text-center mt-3 mb-3">Yapılacaklar Listesi</h5>
+    
+  </nav>
+  
+  <div class="container main-container pt-2">
     <div class="todo-container container">
       <!-- Dynamic elements will show up in here instead of these codes below -->
       <!-- <div class="row">
@@ -33,7 +33,7 @@
     </div>
 
     <div class="nodata-container row">
-      <div class="p-2 mb-3 text-light col-md-8 offset-2 d-flex flex-row justify-content-center align-items-center"
+      <div class="p-2 mb-3 text-light col-md d-flex flex-row justify-content-center align-items-center"
            style="background-color: #356e96!important">
         <b>Hiçbir şey kaydedilmedi!</b>
       </div>

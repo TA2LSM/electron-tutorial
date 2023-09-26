@@ -6,6 +6,9 @@ This project has been written in Electron.js. It includes:
 
 Feel free to use all my codes and have fun!
 
+## Issues
+- Serial port communication: OS port binding needed!
+
 ## Features will be added
 - Graphics interface (data visualization)
 - Export/import parameters

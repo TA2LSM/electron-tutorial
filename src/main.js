@@ -90,6 +90,11 @@ app.on("ready", () => {
     }
   });
 
+  ipcMain.on("todoWindow:close", () => {
+    todoListWindow.close();
+    todoListWindow = null;
+  });
+
   ipcMain.on("todoList:EraseItem", (err, elIdxToErase) => {
     delete todoList[elIdxToErase - 1];
   });

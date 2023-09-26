@@ -1,5 +1,6 @@
 const { ipcRenderer } = require("electron");
 const { SerialPort } = require("serialport");
+// const { autoDetect } = require("@serialport/bindings-cpp");
 
 const sendDataToConsoleBtn = document.getElementById("sendDataToConsoleBtn");
 const showTodoListBtn = document.getElementById("showTodoListBtn");
@@ -17,35 +18,41 @@ const clearDataTerminalSendBtn = document.getElementById(
 );
 const dataTerminal = document.getElementById("data-terminal");
 
+// const Binding = autoDetect();
 let availableSerialPorts = [];
 let selectedSerialPort = null;
 
 //-----------------------------------------------------------------------
 async function listSerialPorts() {
-  await SerialPort.list().then((ports, err) => {
-    const comPortList = document.getElementById("comPortList");
+  try {
+    await SerialPort.list().then((ports, err) => {
+      const comPortList = document.getElementById("comPortList");
 
-    if (err) {
-      printTerminalData("HATA: ", err.message);
-      return;
-    } else {
-      availableSerialPorts = [...ports];
-
-      if (availableSerialPorts.length !== 0) {
-        // sort ports by ascending order of their names
-        if (availableSerialPorts.length > 1) {
-          availableSerialPorts.sort((first, second) =>
-            first.path.localeCompare(second.path)
-          );
-        }
-
-        makeSerialPortList(availableSerialPorts);
-        comPortList.removeAttribute("disabled");
+      if (err) {
+        // printTerminalData("HATA: ", err.message);
+        console.log("HATA: ", err);
+        return;
       } else {
-        comPortList.setAttribute("disabled", "");
+        availableSerialPorts = [...ports];
+
+        if (availableSerialPorts.length !== 0) {
+          // sort ports by ascending order of their names
+          if (availableSerialPorts.length > 1) {
+            availableSerialPorts.sort((first, second) =>
+              first.path.localeCompare(second.path)
+            );
+          }
+
+          makeSerialPortList(availableSerialPorts);
+          comPortList.removeAttribute("disabled");
+        } else {
+          comPortList.setAttribute("disabled", "");
+        }
       }
-    }
-  });
+    });
+  } catch (err) {
+    printTerminalData("Baglanti noktasi listesi alinamadi!" + err);
+  }
 }
 
 function makeSerialPortList(availableSerialPorts) {
@@ -106,7 +113,7 @@ function listPorts() {
 
 // Set a timeout that will check for new serialPorts every 2 seconds.
 // This timeout reschedules itself.
-setTimeout(listPorts, 2000);
+setTimeout(listPorts, 500);
 
 //-----------------------------------------------------------------------
 function printTerminalData(newdata) {
@@ -131,10 +138,23 @@ showTodoListBtn.addEventListener("click", () => {
 });
 
 //-----------------------------------------------------------------------
+function printSerialDeviceInfo(detailedInfo) {
+  document.getElementById("table-device-port-number").innerText =
+    detailedInfo.path ? detailedInfo.path : "N/A";
+  document.getElementById("table-device-name").innerText =
+    detailedInfo.friendlyName ? detailedInfo.friendlyName : "N/A";
+  document.getElementById("table-device-manufacturer").innerText =
+    detailedInfo.manufacturer ? detailedInfo.manufacturer : "N/A";
+  document.getElementById("table-device-serial-number").innerText =
+    detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
+  document.getElementById("table-device-locationId").innerText =
+    detailedInfo.locationId ? detailedInfo.locationId : "N/A";
+}
 
 ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
-  comPortList.innerText = " " + availableSerialPorts[selectedIdx].path;
+  if (selectedIdx > availableSerialPorts.length) return;
 
+  comPortList.innerText = " " + availableSerialPorts[selectedIdx].path;
   const detailedInfo = { ...availableSerialPorts[selectedIdx] };
   // const detailedInfo = availableSerialPorts.find(
   //   ({ path }) =>
@@ -152,9 +172,35 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
     autoOpen: false,
   });
 
+  // PROBLEM: os platform port binding NEEDED!
+  // console.log(selectedSerialPort);
+
   selectedSerialPort.on("error", (err) => {
-    printTerminalData("HATA: ", err.message);
+    printTerminalData("HATA: Erişim engellendi!");
   });
+
+  // selectedSerialPort.on("open", () => {
+  //   comPortList.setAttribute("disabled", "");
+  //   serialCloseBtn.removeAttribute("disabled");
+
+  //   document.getElementById("serial-port-baudrate").innerText =
+  //     selectedSerialPort.settings.baudRate + "bps";
+  //   document.getElementById("serial-port-dataBits").innerText =
+  //     selectedSerialPort.settings.dataBits;
+  //   document.getElementById("serial-port-stopBits").innerText =
+  //     selectedSerialPort.settings.stopBits;
+  //   document.getElementById("serial-port-parity").innerText =
+  //     selectedSerialPort.settings.parity;
+  //   document.getElementById("serial-port-info").removeAttribute("hidden");
+
+  //   selectedSerialPort.on("data", (data) => {
+  //     printTerminalData("Alinan veri: " + data);
+  //   });
+
+  //   printTerminalData("Baglantı noktasi acildi: " + detailedInfo.path);
+  //   document.getElementById("serialdata-input").removeAttribute("disabled");
+  //   serialSendBtn.removeAttribute("disabled");
+  // });
 
   // console.log(availableSerialPorts);
   // console.log(selectedSerialPort);
@@ -162,11 +208,7 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
 
   selectedSerialPort.open(() => {
     comPortList.setAttribute("disabled", "");
-    document.getElementById("serialdata-input").removeAttribute("disabled");
     serialCloseBtn.removeAttribute("disabled");
-    serialSendBtn.removeAttribute("disabled");
-
-    printTerminalData("Baglantı noktasi acildi: " + detailedInfo.path);
 
     document.getElementById("serial-port-baudrate").innerText =
       selectedSerialPort.settings.baudRate + "bps";
@@ -181,6 +223,10 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
     selectedSerialPort.on("data", (data) => {
       printTerminalData("Alinan veri: " + data);
     });
+
+    printTerminalData("Baglantı noktasi acildi: " + detailedInfo.path);
+    document.getElementById("serialdata-input").removeAttribute("disabled");
+    serialSendBtn.removeAttribute("disabled");
   });
 });
 
@@ -197,24 +243,12 @@ serialCloseBtn.addEventListener("click", () => {
   selectedSerialPort.close(() => {
     printTerminalData("Baglantı noktasi kapatildi: " + selectedSerialPort.path);
 
-    selectedSerialPort = [];
     serialCloseBtn.setAttribute("disabled", "");
     serialSendBtn.setAttribute("disabled", "");
     document.getElementById("serial-port-info").setAttribute("hidden", "");
     document.getElementById("serialdata-input").setAttribute("disabled", "");
     comPortList.removeAttribute("disabled");
+
+    selectedSerialPort = null;
   });
 });
-
-function printSerialDeviceInfo(detailedInfo) {
-  document.getElementById("table-device-port-number").innerText =
-    detailedInfo.path ? detailedInfo.path : "N/A";
-  document.getElementById("table-device-name").innerText =
-    detailedInfo.friendlyName ? detailedInfo.friendlyName : "N/A";
-  document.getElementById("table-device-manufacturer").innerText =
-    detailedInfo.manufacturer ? detailedInfo.manufacturer : "N/A";
-  document.getElementById("table-device-serial-number").innerText =
-    detailedInfo.serialNumber ? detailedInfo.serialNumber : "N/A";
-  document.getElementById("table-device-locationId").innerText =
-    detailedInfo.locationId ? detailedInfo.locationId : "N/A";
-}
