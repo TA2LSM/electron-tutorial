@@ -18,3 +18,9 @@ body {
 .main-container {
     z-index: 0;
 }
+
+#data-terminal {
+    resize: none;
+    font-size: small;
+    overflow-y: scroll;
+}
