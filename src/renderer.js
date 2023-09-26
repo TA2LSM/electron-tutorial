@@ -22,11 +22,10 @@ let dataTerminalContent = [];
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
     if (err) {
-      dataTerminal.innerHTML = err.message;
+      dataTerminalPrint("HATA:", err.message);
       return;
     } else {
       availableSerialPorts = [...ports];
-      // console.log(availableSerialPorts);
       makeSerialPortList(availableSerialPorts);
     }
   });
@@ -116,12 +115,11 @@ ipcRenderer.on("serialPort:selectedIdx", (err, selectedIdx) => {
   comPortList.innerText =
     " " + serialPortDropdownMenu.childNodes[selectedIdx].innerText;
 
-  const detailedInfo = availableSerialPorts.find(
-    ({ path }) =>
-      path === serialPortDropdownMenu.childNodes[selectedIdx].innerText
-  );
-
-  // console.log(detailedInfo);
+  const detailedInfo = { ...availableSerialPorts[selectedIdx] };
+  // const detailedInfo = availableSerialPorts.find(
+  //   ({ path }) =>
+  //     path === serialPortDropdownMenu.childNodes[selectedIdx].innerText
+  // );
 
   document.getElementById("table-device-port-number").innerText =
     detailedInfo.path ? detailedInfo.path : "N/A";
