@@ -20,17 +20,7 @@
   </nav>
   
   <div class="container main-container pt-2">
-    <div class="todo-container container">
-      <!-- Dynamic elements will show up in here instead of these codes below -->
-      <!-- <div class="row">
-        <div style="background-color: #582E48!important"
-        class="p-2 mb-3 text-light bg-dark col-md-8 offset-2 shadow card d-flex flex-row justify-content-center align-items-center">
-          <p class="m-0 w-100">Bu bir yapılacak listesi...</p>
-          <button class="btn btn-sm btn-outline-warning flex-shrink-1 mr-1">Düzenle</button>
-          <button class="btn btn-sm btn-outline-danger flex-shrink-1">Sil</button>
-        </div>
-      </div> -->
-    </div>
+    <div class="todo-container container"></div>
 
     <div class="nodata-container row">
       <div class="p-2 mb-3 text-light col-md d-flex flex-row justify-content-center align-items-center"
@@ -38,6 +28,10 @@
         <b>Hiçbir şey kaydedilmedi!</b>
       </div>
     </div>
+
+    <nav class="navbar fixed-bottom text-white navbar-light bg-dark">
+      <span>Toplam kayıt: <b id="totalTodos"></b></span>
+    </nav>
     
     <!-- Scripts are need to be in here at last line of code -->
     <script src="../src/todoList.js"></script>  

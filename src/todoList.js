@@ -1,5 +1,21 @@
 const { ipcRenderer } = require("electron");
 
+const totalTodos = document.getElementById("totalTodos");
+const quickTodoInput = document.getElementById("quickTodoInput");
+
+quickTodoInput.addEventListener("keypress", (e) => {
+  if (quickTodoInput.value.length === 0) return;
+
+  // if (e.charCode == 13) {
+  if (e.key == "Enter") {
+    ipcRenderer.send("newTodoWindow:save", {
+      method: "quick",
+      value: quickTodoInput.value,
+    });
+    quickTodoInput.value = "";
+  }
+});
+
 document.querySelector("#quickTodoAddBtn").addEventListener("click", () => {
   const quickTodoInput = document.querySelector("#quickTodoInput");
 
@@ -18,6 +34,8 @@ document.getElementById("todoWindowCloseBtn").addEventListener("click", () => {
   ipcRenderer.send("todoWindow:close");
 });
 
+checkTodoListEmpty();
+
 // Catching events sended by xxx.webContents.send()
 ipcRenderer.on("todoList:updated", (err, data) => {
   createTodo(data);
@@ -25,6 +43,8 @@ ipcRenderer.on("todoList:updated", (err, data) => {
 });
 
 ipcRenderer.on("todoList:printAll", (err, todoList) => {
+  totalTodos.innerText = todoList.length;
+
   document.querySelector(".nodata-container").style.display = "none";
   todoList.map((item) => createTodo(item));
 });
@@ -71,7 +91,9 @@ function createTodo(data) {
   // Add event listener to every single todo item
   todoButtonErase.addEventListener("click", (el) => {
     if (confirm("Silmek istediğinize emin misiniz?")) {
-      const elIdxToErase = el.target.parentNode.parentNode.getAttribute("key");
+      const parent = el.target.parentNode.parentNode.parentNode;
+      const child = el.target.parentNode.parentNode;
+      const elIdxToErase = Array.prototype.indexOf.call(parent.children, child);
       ipcRenderer.send("todoList:EraseItem", elIdxToErase);
 
       el.target.parentNode.parentNode.remove(); // erase todo item in html file
@@ -89,4 +111,6 @@ function checkTodoListEmpty() {
   } else {
     nodataContainer.style.display = "block";
   }
+
+  totalTodos.innerText = todoContainer.children.length;
 }

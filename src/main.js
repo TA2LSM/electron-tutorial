@@ -35,7 +35,7 @@ app.on("ready", () => {
     //-------------------------------------------------
   });
 
-  // mainWindow.setResizable(false);
+  if (process.env.NODE_ENV === "production") todoListWindow.setResizable(false);
 
   mainWindow.loadURL(
     url.format({
@@ -65,7 +65,7 @@ app.on("ready", () => {
     createTodoWindow();
   });
 
-  // Catching events coming from newTodo.html
+  // Catching events coming from other html files
   ipcMain.on("newTodoWindow:close", () => {
     newTodoWindow.close(); // close new to do page
     newTodoWindow = null;
@@ -75,7 +75,7 @@ app.on("ready", () => {
     // data.method, data.value
     if (data) {
       let todo = {
-        id: todoList.length + 1,
+        id: todoList.length,
         text: data.value,
       };
       todoList.push(todo);
@@ -95,8 +95,13 @@ app.on("ready", () => {
     todoListWindow = null;
   });
 
+  ipcMain.on("todoList:Refresh", () => {
+    todoListWindow.webContents.send("todoList:printAll", todoList);
+  });
+
   ipcMain.on("todoList:EraseItem", (err, elIdxToErase) => {
-    delete todoList[elIdxToErase - 1];
+    todoList.splice(elIdxToErase, 1);
+    // delete todoList[elIdxToErase];  // lenght remains same after delete ??
   });
 
   ipcMain.on("serialPort:Selected", (err, selectedIdx) => {
@@ -189,8 +194,8 @@ function setMenuShortcut(param) {
 function createTodoWindow() {
   todoListWindow = new BrowserWindow({
     title: "Yapılacaklar Listesi",
-    // width: 400,
-    // height: 300,
+    width: 800,
+    height: 720,
     //--- added to solve require issue in html files --
     webPreferences: {
       nodeIntegration: true,
@@ -198,6 +203,8 @@ function createTodoWindow() {
     },
     //-------------------------------------------------
   });
+
+  if (process.env.NODE_ENV === "production") todoListWindow.setResizable(false);
 
   todoListWindow.loadURL(
     url.format({
