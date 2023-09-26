@@ -1,12 +1,12 @@
 # electron-tutorial
 This project has been written in Electron.js. It includes:
 - A simple to-do list application
+- Serial port communication
 - Some other features will be added in the future...
 
 Feel free to use all my codes and have fun!
 
 ## Features will be added
-- Serial port communication
 - Graphics interface (data visualization)
 - Export/import parameters
 

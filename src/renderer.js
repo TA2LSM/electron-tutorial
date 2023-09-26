@@ -16,7 +16,7 @@ const serialCloseBtn = document.getElementById("serial-port-close-btn");
 const dataTerminal = document.getElementById("data-terminal");
 
 let availableSerialPorts = [];
-let selectedSerialPort;
+let selectedSerialPort = null;
 
 let dataTerminalContent = [];
 
@@ -80,8 +80,10 @@ function makeSerialPortList(ports) {
 }
 
 function listPorts() {
-  listSerialPorts();
-  setTimeout(listPorts, 2000);
+  if (selectedSerialPort === null) {
+    listSerialPorts();
+    setTimeout(listPorts, 2000);
+  }
 }
 
 // Set a timeout that will check for new serialPorts every 2 seconds.
@@ -131,19 +133,30 @@ serialPortDropdownMenu.addEventListener("click", () => {
   selectedSerialPort = new SerialPort({
     path: detailedInfo.path,
     baudRate: 9600,
+    parity: "none",
+    stopBits: 1,
     autoOpen: false,
   });
 
   if (selectedSerialPort.isOpen === false) {
     selectedSerialPort.open(() => {
-      dataTerminalPrint(detailedInfo.path + " baglanti noktasi acildi...");
+      dataTerminalPrint("Baglantı noktasi acildi: " + detailedInfo.path);
 
       selectedSerialPort.on("data", (data) => {
         dataTerminalPrint("Alinan veri: " + data);
       });
 
+      console.log(selectedSerialPort);
+
       document.getElementById("serial-port-baudrate").innerText =
-        selectedSerialPort.baudRate;
+        selectedSerialPort.port.openOptions.baudRate + "bps";
+      document.getElementById("serial-port-dataBits").innerText =
+        selectedSerialPort.port.openOptions.dataBits;
+      document.getElementById("serial-port-stopBits").innerText =
+        selectedSerialPort.port.openOptions.stopBits;
+      document.getElementById("serial-port-parity").innerText =
+        selectedSerialPort.port.openOptions.parity;
+      document.getElementById("serial-port-info").removeAttribute("hidden");
 
       comPortList.setAttribute("disabled", "");
       serialCloseBtn.removeAttribute("disabled");
@@ -163,11 +176,13 @@ serialSendBtn.addEventListener("click", () => {
 });
 
 serialCloseBtn.addEventListener("click", () => {
-  selectedSerialPort.close((err) => {
-    dataTerminalPrint("HATA: " + err);
-  });
+  selectedSerialPort.close(() => {
+    dataTerminalPrint("Baglantı noktasi kapatildi: " + selectedSerialPort.path);
 
-  serialCloseBtn.setAttribute("disabled", "");
-  serialSendBtn.setAttribute("disabled", "");
-  comPortList.removeAttribute("disabled");
+    selectedSerialPort = null;
+    serialCloseBtn.setAttribute("disabled", "");
+    serialSendBtn.setAttribute("disabled", "");
+    document.getElementById("serial-port-info").setAttribute("hidden", "");
+    comPortList.removeAttribute("disabled");
+  });
 });
