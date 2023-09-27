@@ -31,7 +31,6 @@
   },
   "devDependencies": {
     "electron": "^26.2.2",
-    "electron-packager": "^17.1.2",
-    "flexmonster": "^2.9.60"
+    "electron-packager": "^17.1.2"
   }
 }
