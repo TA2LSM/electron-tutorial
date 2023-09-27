@@ -4,6 +4,8 @@
  * Bootstrap icons >> https://icons.getbootstrap.com/
  * jQuery v3.7.1 slim. min >> https://releases.jquery.com/
  * Popper v1.16.1 (umd) min >> https://unpkg.com/browse/popper.js@1.16.1/
+ * Icons >> https://icon-icons.com, https://iconfinder.com
+ * Deployment >> Check ReadMe.md
  */
 
 const electron = require("electron");
