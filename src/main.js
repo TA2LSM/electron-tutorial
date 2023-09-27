@@ -1,13 +1,14 @@
-//----- Back-end Codes -----
 /**
  * Bootstrap 4.0.0 css file used in this project
  * Bootstrap icons >> https://icons.getbootstrap.com/
  * jQuery v3.7.1 slim. min >> https://releases.jquery.com/
  * Popper v1.16.1 (umd) min >> https://unpkg.com/browse/popper.js@1.16.1/
  * Icons >> https://icon-icons.com, https://iconfinder.com
+ * Chart >> https://www.chartjs.org/docs/latest/getting-started/
  * Deployment >> Check ReadMe.md
  */
 
+//----- Back-end Codes -----
 const electron = require("electron");
 const url = require("url");
 const path = require("path");
