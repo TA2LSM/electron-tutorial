@@ -48,9 +48,15 @@ Some information about code structure
 - Add "productName": "...", to package.json
 - Get project from github and make "npm install" for every different os platform (important)
     - `MAC Command:` 
+    ```bash
         electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds
+    ```
     - `WIN Command:` 
+    ```bash
         electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/icon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName="TA2LSM Electron Project"
+    ```
     - `LINUX Command:` 
+    ```bash
         electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/linux/icon.png --prune=true --out=release-builds
+    ```
 
