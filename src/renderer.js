@@ -4,6 +4,7 @@ const { SerialPort } = require("serialport");
 
 const sendDataToConsoleBtn = document.getElementById("sendDataToConsoleBtn");
 const showTodoListBtn = document.getElementById("showTodoListBtn");
+const showDashboardBtn = document.getElementById("showDashboardBtn");
 
 const comPortList = document.getElementById("comPortList");
 const serialPortDropdownMenu = document.getElementById(
@@ -137,6 +138,10 @@ showTodoListBtn.addEventListener("click", () => {
   ipcRenderer.send("key:openTodoListBtn");
 });
 
+showDashboardBtn.addEventListener("click", () => {
+  ipcRenderer.send("key:openDashboardBtn");
+});
+
 //-----------------------------------------------------------------------
 function printSerialDeviceInfo(detailedInfo) {
   document.getElementById("table-device-port-number").innerText =
@@ -252,3 +257,5 @@ serialCloseBtn.addEventListener("click", () => {
     selectedSerialPort = null;
   });
 });
+
+//-----------------------------------------------------------------------

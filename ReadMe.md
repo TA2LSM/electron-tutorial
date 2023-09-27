@@ -9,6 +9,7 @@ If you want to learn more about Electron.js, check the [Quick Start Guide](https
 
 ## Issues
 - Serial port communication: OS port binding needed. Problems to open some ports.
+- Serial port communication: Need to remove serial port when disconnected
 
 ## Features will be added
 - Graphics interface (data visualization)

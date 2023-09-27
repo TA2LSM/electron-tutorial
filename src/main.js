@@ -13,7 +13,7 @@ const url = require("url");
 const path = require("path");
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
-let mainWindow, aboutWindow, todoListWindow, newTodoWindow;
+let mainWindow, dashboardWindow, todoListWindow, newTodoWindow, aboutWindow;
 
 // temporary list
 let todoList = [];
@@ -61,6 +61,10 @@ app.on("ready", () => {
   ipcMain.on("key:sendBtnClicked", (err, data) => {
     if (data) console.log(data);
     else console.log("No data!");
+  });
+
+  ipcMain.on("key:openDashboardBtn", () => {
+    createDashboardWindow();
   });
 
   ipcMain.on("key:openTodoListBtn", () => {
@@ -228,28 +232,6 @@ function createTodoWindow() {
   });
 }
 
-function createAboutWindow() {
-  aboutWindow = new BrowserWindow({
-    title: "Hakkında",
-    width: 350,
-    height: 150,
-    resizable: false,
-  });
-
-  aboutWindow.loadURL(
-    url.format({
-      pathname: path.join(__dirname, "../templates/about.html"),
-      protocol: "file:",
-      slashes: true,
-    })
-  );
-
-  // catch aboutWindow's close event for deleting it from memory
-  aboutWindow.on("close", () => {
-    aboutWindow = null;
-  });
-}
-
 function createNewTodoWindow() {
   newTodoWindow = new BrowserWindow({
     title: "Yeni Todo Ekle",
@@ -276,5 +258,57 @@ function createNewTodoWindow() {
   // catch newTodoWindow's close event for deleting it from memory
   newTodoWindow.on("close", () => {
     newTodoWindow = null;
+  });
+}
+
+function createDashboardWindow() {
+  dashboardWindow = new BrowserWindow({
+    title: "Dashboard",
+    width: 800,
+    height: 600,
+    //--- added to solve require issue in html files --
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false,
+    },
+    //-------------------------------------------------
+  });
+
+  if (process.env.NODE_ENV === "production")
+    dashboardWindow.setResizable(false);
+
+  dashboardWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "../templates/dashboard.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+
+  // catch aboutWindow's close event for deleting it from memory
+  dashboardWindow.on("close", () => {
+    dashboardWindow = null;
+  });
+}
+
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
+    title: "Hakkında",
+    width: 350,
+    height: 150,
+    resizable: false,
+  });
+
+  aboutWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, "../templates/about.html"),
+      protocol: "file:",
+      slashes: true,
+    })
+  );
+
+  // catch aboutWindow's close event for deleting it from memory
+  aboutWindow.on("close", () => {
+    aboutWindow = null;
   });
 }
