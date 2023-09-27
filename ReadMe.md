@@ -8,7 +8,7 @@ Feel free to use all my codes and have fun!
 If you want to learn more about Electron.js, check the [Quick Start Guide](https://www.electronjs.org/docs/latest/tutorial/quick-start).
 
 ## Issues
-- Serial port communication: OS port binding needed!
+- Serial port communication: OS port binding needed. Problems to open some ports.
 
 ## Features will be added
 - Graphics interface (data visualization)
@@ -18,19 +18,27 @@ If you want to learn more about Electron.js, check the [Quick Start Guide](https
 ## How to Use
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](https://www.npmjs.com/)) installed on your computer. From your command line:
 
+- Clone this repository
 ```bash
-# Clone this repository
 git clone https://github.com/TA2LSM/electron-tutorial.git
+```
 
-# Go into the repository
+- Go into the repository
+```bash
 cd electron-tutorial
+```
 
-# Install dependencies
+- Install dependencies
+```bash
 npm install
+```
 
-# Run the app
+- Run the app
+```bash
 npm start
-# OR run the app with nodemon
+```
+- OR run the app with nodemon
+```bash
 npm run watch
 ```
 
