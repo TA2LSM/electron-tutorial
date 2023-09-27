@@ -2,6 +2,7 @@
 This project has been written in Electron.js. It includes:
 - A simple to-do list application
 - Serial port communication
+- Graphics interface (simple data visualization)
 - Some other features will be added in the future...
 
 Feel free to use all my codes and have fun!
@@ -12,9 +13,7 @@ If you want to learn more about Electron.js, check the [Quick Start Guide](https
 - Serial port communication: Need to remove serial port when disconnected
 
 ## Features will be added
-- Graphics interface (data visualization)
 - Export/import parameters
-
 
 ## How to Use
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](https://www.npmjs.com/)) installed on your computer. From your command line:

@@ -26,6 +26,8 @@
   "license": "ISC",
   "dependencies": {
     "bootstrap-icons": "^1.11.1",
+    "chart.js": "^4.4.0",
+    "electron-chartjs": "^1.0.0",
     "nodemon": "^3.0.1",
     "serialport": "^12.0.0"
   },
